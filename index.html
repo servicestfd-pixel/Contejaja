@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mes Contes Magiques — voix réalistes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fdf6ec; --ink:#3b2a1f; --soft:#8a7362; --card:#fff;
+    --accent:#e2674a; --accent2:#4a8fe2; --gold:#f2b53c; --line:#ecdcc8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Fredoka',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;
+    background-image:radial-gradient(circle at 15% 10%,#fde4c8 0,transparent 35%),radial-gradient(circle at 90% 80%,#e3edf9 0,transparent 40%);}
+  .wrap{max-width:820px;margin:0 auto;padding:24px 18px 60px}
+  header{text-align:center;margin:10px 0 26px}
+  header h1{font-size:clamp(28px,7vw,44px);font-weight:700;letter-spacing:.5px}
+  header h1 span{color:var(--accent)}
+  header p{color:var(--soft);margin-top:6px;font-size:17px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+  .tale{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:18px 14px;text-align:center;cursor:pointer;
+    transition:transform .15s,box-shadow .15s;font:inherit;color:inherit}
+  .tale:hover,.tale:focus-visible{transform:translateY(-3px);box-shadow:0 8px 20px rgba(120,80,40,.12);outline:none}
+  .tale .emo{font-size:46px;display:block;margin-bottom:8px}
+  .tale .t{font-weight:600;font-size:17px;line-height:1.2}
+  .tale .n{color:var(--soft);font-size:13px;margin-top:6px}
+  .hidden{display:none!important}
+  .back{background:none;border:none;font:inherit;color:var(--soft);font-size:16px;cursor:pointer;padding:6px 0;margin-bottom:10px}
+  .panel{background:var(--card);border:2px solid var(--line);border-radius:24px;padding:24px 20px}
+  .panel h2{font-size:26px;text-align:center}
+  .panel .sub{text-align:center;color:var(--soft);margin:6px 0 20px}
+  .role{display:flex;align-items:center;gap:10px;padding:12px;border-radius:16px;background:#fbf3e8;margin-bottom:10px;flex-wrap:wrap}
+  .role .ico{font-size:30px;width:40px;text-align:center}
+  .role .info{flex:1;min-width:150px}
+  .role label{display:block;font-size:14px;color:var(--soft);margin-bottom:4px}
+  .role input{width:100%;font:inherit;font-size:18px;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:#fff;color:var(--ink)}
+  .role input:focus{outline:none;border-color:var(--accent2)}
+  .gender{display:flex;border-radius:12px;overflow:hidden;border:2px solid var(--line)}
+  .gender button{font:inherit;font-size:14px;padding:8px 10px;border:none;background:#fff;cursor:pointer;color:var(--soft)}
+  .gender button.on{background:var(--accent2);color:#fff}
+  .actions{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+  .btn{font:inherit;font-size:18px;font-weight:600;padding:12px 22px;border-radius:999px;border:none;cursor:pointer;background:var(--accent);color:#fff;box-shadow:0 4px 0 #b84a30}
+  .btn:active{transform:translateY(2px);box-shadow:0 2px 0 #b84a30}
+  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--line);box-shadow:none}
+  .book{background:var(--card);border:2px solid var(--line);border-radius:24px;padding:28px 22px;min-height:340px;display:flex;flex-direction:column}
+  .book .emo{font-size:60px;text-align:center}
+  .book h2{text-align:center;font-size:24px;margin:6px 0 4px}
+  .book .cast{text-align:center;color:var(--soft);font-size:14px;margin-bottom:16px}
+  .page{font-family:'Lora',serif;font-size:clamp(19px,4.6vw,23px);line-height:1.7;flex:1}
+  .page p{margin-bottom:14px}
+  .seg{border-radius:8px;transition:background .2s}
+  .seg.now{background:#fff3c4;box-shadow:0 0 0 3px #fff3c4}
+  .say{font-style:italic}
+  .nm{font-family:'Fredoka',sans-serif;font-weight:600;font-style:normal;color:var(--accent);background:#fdeee8;padding:0 6px;border-radius:8px;white-space:nowrap}
+  .snd{font-size:.95em;border:none;background:#eef4fc;border-radius:999px;padding:0 6px;cursor:pointer;vertical-align:baseline;line-height:1.3}
+  .snd.now{background:var(--gold);transform:scale(1.2)}
+  .nav{display:flex;align-items:center;justify-content:space-between;margin-top:20px;gap:8px}
+  .dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--line)}
+  .dot.on{background:var(--gold)}
+  .round{width:52px;height:52px;border-radius:50%;border:none;font-size:22px;cursor:pointer;background:var(--gold);color:#fff;box-shadow:0 4px 0 #c98f1e;flex-shrink:0}
+  .round:disabled{opacity:.3;cursor:default}
+  .tools{display:flex;justify-content:center;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .small{font:inherit;font-size:15px;padding:9px 14px;border-radius:999px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink)}
+  .small.play{background:var(--accent2);border-color:var(--accent2);color:#fff;font-weight:600}
+  .small.story{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  .fin{text-align:center;font-family:'Fredoka';font-size:30px;color:var(--accent);margin:10px 0}
+  .settings{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:16px;margin-top:14px;font-size:15px}
+  .settings label{display:block;color:var(--soft);margin:10px 0 4px}
+  .settings select,.settings input[type=range]{width:100%;font:inherit;font-size:16px;padding:8px;border-radius:10px;border:2px solid var(--line);background:#fff}
+  .settings .row{display:flex;align-items:center;gap:8px;margin-top:10px}
+  .settings .tip{color:var(--soft);font-size:13px;margin-top:12px;line-height:1.4}
+  .settings h4{margin-top:14px;font-size:15px}
+  /* magie visuelle */
+  #sky{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+  .wrap{position:relative;z-index:1}
+  .scene{display:flex;align-items:flex-end;justify-content:space-between;min-height:96px;margin:4px 0 14px;padding:10px 6px;border-radius:18px;
+    background:linear-gradient(#eaf3ff,#fdf6ec);overflow:hidden;transition:background .8s}
+  .scene.nuit{background:linear-gradient(#2b3566,#5a5f99)} .scene.nuit small{color:#fff}
+  .scene.feu{background:linear-gradient(#ffe2c2,#fff3e3)} .scene.eau{background:linear-gradient(#d6f0ff,#eefaf6)}
+  .scene.vent{background:linear-gradient(#e6edf5,#f7f9fb)} .scene.foret{background:linear-gradient(#e2f5df,#fbf7ec)}
+  .deco{display:flex;flex-direction:column;gap:2px;font-size:34px;min-width:44px;text-align:center}
+  .deco span{display:inline-block;animation:sway 3.5s ease-in-out infinite;transform-origin:bottom center}
+  .deco span:nth-child(2){animation-delay:-1.7s}
+  .chars{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;flex:1}
+  .ch{display:flex;flex-direction:column;align-items:center;font-size:42px;cursor:pointer;animation:idle 2.6s ease-in-out infinite;user-select:none}
+  .ch:nth-child(2){animation-delay:-.6s}.ch:nth-child(3){animation-delay:-1.2s}.ch:nth-child(4){animation-delay:-1.8s}
+  .ch small{font-size:11px;font-family:'Fredoka';color:var(--soft);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ch.talk{animation:talk .35s ease-in-out infinite}
+  @keyframes sway{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+  @keyframes idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  @keyframes talk{0%,100%{transform:translateY(0) scale(1.15)}50%{transform:translateY(-8px) scale(1.25) rotate(-4deg)}}
+  .page.turn{animation:turnIn .55s ease-out}
+  @keyframes turnIn{from{opacity:0;transform:translateX(40px) rotate(1deg)}to{opacity:1;transform:none}}
+  .pop{position:fixed;top:42%;font-size:90px;pointer-events:none;z-index:50;animation:pop 1.6s ease-out forwards}
+  @keyframes pop{0%{transform:translate(-50%,0) scale(.2);opacity:0}20%{transform:translate(-50%,-20px) scale(1.25);opacity:1}100%{transform:translate(-50%,-170px) scale(1);opacity:0}}
+  .book.shake{animation:shake .45s}
+  @keyframes shake{0%,100%{transform:none}20%{transform:translate(-6px,2px)}40%{transform:translate(6px,-2px)}60%{transform:translate(-4px,1px)}80%{transform:translate(4px,0)}}
+  .fin{animation:finIn 1s ease-out}
+  @keyframes finIn{from{transform:scale(.3) rotate(-10deg);opacity:0}to{transform:none;opacity:1}}
+  .no-anim .deco span,.no-anim .ch,.no-anim .page.turn,.no-anim .fin{animation:none!important}
+  @media (prefers-reduced-motion:reduce){.book.shake{animation:none}}
+  .progress{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin:6px 0}
+  #studioBar{height:100%;background:linear-gradient(90deg,var(--gold),var(--accent));transition:width .4s}
+  .rrow{display:flex;gap:8px;align-items:center;padding:10px;border-radius:14px;background:#fbf3e8;margin-bottom:8px;border:2px solid transparent}
+  .rrow.done{background:#e9f6e4}.rrow.next{border-color:var(--gold)}
+  .rrow .tx{flex:1;font-family:'Lora',serif;font-size:17px;line-height:1.45}
+  .rrow small{display:block;font-family:'Fredoka';font-size:12px;color:var(--soft);margin-top:2px}
+  .rec{width:48px;height:48px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:20px;cursor:pointer;flex-shrink:0}
+  .rec.on{background:#c0392b;animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,.5)}50%{box-shadow:0 0 0 10px rgba(192,57,43,0)}}
+  .mini{width:38px;height:38px;border-radius:50%;border:2px solid var(--line);background:#fff;cursor:pointer;flex-shrink:0}
+  .mini:disabled{opacity:.3}
+</style>
+</head>
+<body>
+<canvas id="sky"></canvas>
+<div class="wrap">
+
+  <section id="home">
+    <header>
+      <h1>✨ Mes Contes <span>Magiques</span> ✨</h1>
+      <p>Choisis une histoire, décide qui joue chaque rôle… et écoute !</p>
+    </header>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="cast" class="hidden">
+    <button class="back" data-go="home">← Toutes les histoires</button>
+    <div class="panel">
+      <div style="text-align:center;font-size:54px" id="castEmo"></div>
+      <h2 id="castTitle"></h2>
+      <p class="sub">Qui joue le rôle de qui ? Écris un prénom pour chaque personnage.</p>
+      <div id="roles"></div>
+      <div class="actions">
+        <button class="btn ghost" id="resetBtn">Noms d'origine</button>
+        <button class="btn ghost" id="studioBtn">🎙️ Ma voix</button>
+        <button class="btn" id="startBtn">📖 Lire l'histoire</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="studio" class="hidden">
+    <button class="back" id="studioBack">← Retour</button>
+    <div class="panel">
+      <div style="text-align:center;font-size:48px">🎙️</div>
+      <h2>Enregistre ta voix</h2>
+      <p class="sub" id="studioSub"></p>
+      <div class="row" style="justify-content:center;margin-bottom:10px"><input type="checkbox" id="myOn" checked><label for="myOn" style="margin:0">Lire les histoires avec ma voix</label></div>
+      <div class="progress"><div id="studioBar"></div></div>
+      <p class="tip" id="studioMsg" style="text-align:center"></p>
+      <div id="studioList"></div>
+    </div>
+  </section>
+  <section id="read" class="hidden">
+    <button class="back" id="toCast">← Changer les rôles</button>
+    <div class="book">
+      <div class="emo" id="bookEmo"></div>
+      <h2 id="bookTitle"></h2>
+      <div class="cast" id="bookCast"></div>
+      <div class="scene" id="scene"></div>
+      <div class="page" id="page"></div>
+      <div class="nav">
+        <button class="round" id="prev" aria-label="Page précédente">◀</button>
+        <div class="dots" id="dots"></div>
+        <button class="round" id="next" aria-label="Page suivante">▶</button>
+      </div>
+    </div>
+    <div class="tools">
+      <button class="small story" id="storyBtn">🌙 Raconte-moi toute l'histoire</button>
+      <button class="small play" id="speak">🔊 Écouter la page</button>
+      <button class="small" id="studioBtn2">🎙️ Ma voix</button>
+      <button class="small" id="setBtn">⚙️ Voix</button>
+      <button class="small" data-go="home">🏠</button>
+    </div>
+    <div class="settings" id="elPanel">
+      <b>🤖 Voix IA gratuite (installée sur le téléphone)</b>
+      <p class="tip" id="piperState" style="color:var(--ink)">Gratuite et illimitée, aucune inscription. Une fois installée, elle marche même sans internet. Bien plus naturelle que les voix du téléphone.</p>
+      <div class="actions" style="margin-top:6px">
+        <button class="small story" id="piperInstall">⬇️ Installer les voix IA (gratuit)</button>
+        <button class="small" id="piperOff">Désactiver</button>
+      </div>
+      <hr style="border:none;border-top:2px dashed var(--line);margin:14px 0">
+      <b>🎙️ Voix réalistes ElevenLabs</b>
+      <p class="tip" id="elState" style="color:var(--ink)">Non connecté : l'histoire est lue avec les voix du téléphone.</p>
+      <label for="elKey">Ta clé API ElevenLabs</label>
+      <input type="password" id="elKey" placeholder="sk_..." autocomplete="off" style="width:100%;font:inherit;font-size:16px;padding:8px;border-radius:10px;border:2px solid var(--line)">
+      <div class="actions" style="margin-top:8px">
+        <button class="small play" id="elConnect">🔌 Connecter</button>
+        <button class="small" id="elOff">Utiliser les voix du téléphone</button>
+      </div>
+      <div id="elMore" class="hidden">
+        <label for="elModel">Modèle</label>
+        <select id="elModel">
+          <option value="eleven_v3">Eleven v3 — le plus expressif (chuchote, crie, rit…)</option>
+          <option value="eleven_multilingual_v2">Multilingual v2 — classique, un peu moins cher en latence</option>
+        </select>
+        <div id="elCats"></div>
+        <p class="tip" id="elCost"></p>
+        <div class="actions" style="margin-top:8px">
+          <button class="small story" id="elPrep">⬇️ Préparer cette histoire</button>
+          <button class="small" id="elClear">🗑️ Vider les sons enregistrés</button>
+        </div>
+        <p class="tip" id="elProg"></p>
+        <p class="tip">💡 Les phrases déjà générées sont gardées sur ce téléphone : les relire ne coûte rien. Si tu changes un prénom, seules les phrases avec ce prénom sont régénérées. Pour des voix 100 % françaises, ajoute-les depuis la « Voice Library » d'ElevenLabs : elles apparaîtront ici.</p>
+      </div>
+    </div>
+
+        <div class="settings hidden" id="settings">
+      <p class="tip" id="voiceCount" style="margin-top:0"></p>
+      <label for="voiceSel">Voix de la conteuse</label>
+      <select id="voiceSel"></select>
+      <div class="row"><button class="small" id="testVoice">🔈 Tester cette voix</button></div>
+      <p class="tip" id="voiceStatus"></p>
+      <label for="maleSel">Voix des personnages garçons (loup, ogre, géant…)</label>
+      <select id="maleSel"></select>
+      <label for="rate">Vitesse de lecture</label>
+      <input type="range" id="rate" min="0.6" max="1.2" step="0.05" value="0.9">
+      <div class="row"><input type="checkbox" id="fxOn" checked><label for="fxOn" style="margin:0;color:var(--ink)">Bruitages des animaux</label></div>
+      <div class="row"><input type="checkbox" id="charOn" checked><label for="charOn" style="margin:0;color:var(--ink)">Voix différentes pour les personnages</label></div>
+      <h4>🎵 Magie</h4>
+      <div class="row"><input type="checkbox" id="musOn" checked><label for="musOn" style="margin:0;color:var(--ink)">Musique boîte à musique</label></div>
+      <label for="musVol">Volume de la musique</label>
+      <input type="range" id="musVol" min="0" max="1" step="0.05" value="0.5">
+      <div class="row"><input type="checkbox" id="ambOn" checked><label for="ambOn" style="margin:0;color:var(--ink)">Ambiances (forêt, nuit, feu, rivière, vent)</label></div>
+      <div class="row"><input type="checkbox" id="animOn" checked><label for="animOn" style="margin:0;color:var(--ink)">Animations et étoiles</label></div>
+      <p class="tip">💡 Les voix marquées ⭐ sont les plus naturelles. Pour en ajouter sur iPhone : Réglages → Accessibilité → Contenu énoncé → Voix → Français → Audrey (Premium).</p>
+    </div>
+  </section>
+</div>
+
+<script>
+/*
+  Format des textes :
+  {A}               prénom choisi pour le rôle A
+  {A|il|elle}       mot selon garçon / fille
+  [[C:« ... »]]     réplique dite par le personnage C (voix du personnage). X = personnage secondaire.
+  ((loup))          bruitage
+  Voix des rôles : p = hauteur (0 très grave → 2 très aigu), r = vitesse
+*/
+const TALES = [
+{
+  id:"chaperon", title:"Le Petit Chaperon rouge", emo:"🧺",
+  roles:[
+    {k:"A", label:"L'enfant au chaperon rouge", def:"Chaperon Rouge", g:"f", ico:"👧", p:1.45, r:1},
+    {k:"B", label:"La grand-mère", def:"Grand-Mère", g:"f", ico:"👵", p:0.85, r:0.85},
+    {k:"C", label:"Le loup", def:"Loup", g:"m", ico:"🐺", p:0.35, r:0.85},
+    {k:"D", label:"Le bûcheron", def:"Bûcheron", g:"m", ico:"🪓", p:0.7, r:0.95}
+  ],
+  extras:{X:{g:"f",p:1.1,r:0.95}},
+  pages:[
+    "Il était une fois, dans un petit village au bord d'une grande forêt, {A|un petit garçon|une petite fille} que tout le monde aimait. Sa grand-mère, {B}, lui avait cousu un joli chaperon de velours rouge. Il lui allait si bien qu'on ne l'appela plus que {A}.",
+    "Un matin, sa maman fit cuire des galettes. ((pause)) [[X:« {A}, {B} est malade. Va lui porter cette galette et ce petit pot de beurre. »]] [[X/doux:« Reste bien sur le chemin, ne parle à personne, et ne traîne pas dans les bois. »]] [[A:« C'est promis, Maman ! »]]",
+    "{B} habitait de l'autre côté de la forêt, dans une petite maison sous trois grands chênes. {A} prit son panier et partit en chantonnant. ((oiseaux)) Le soleil passait entre les feuilles, et les oiseaux chantaient.",
+    "Au milieu du bois, ((loup)) {C} sortit de derrière un arbre. {C|Il|Elle} avait bien envie de croquer {A}… Mais des bûcherons travaillaient tout près, et {C|il|elle} n'osa pas. Alors {C|il|elle} prit sa voix la plus douce.",
+    "[[C/doux:« Bonjour, mon enfant. Où vas-tu de si bon matin ? »]] [[A:« Je vais chez {B}, lui porter une galette et un petit pot de beurre. »]] [[C/doux:« Et où habite {B} ? »]] [[A:« Tout au bout du chemin, sous les trois grands chênes. »]]",
+    "{C} réfléchit un instant. [[C/doux:« Regarde toutes ces jolies fleurs ! Tu devrais en cueillir un bouquet. Cela ferait tellement plaisir à {B} ! »]] Et {C} s'en alla par le chemin le plus court. {A} oublia sa promesse, et se mit à cueillir des fleurs, une ici, une autre là, toujours plus loin dans le bois.",
+    "Pendant ce temps, {C} courait, courait… et arriva le premier devant la maison de {B}. ((toc)) [[B/triste:« Qui est là ? »]] [[C/doux:« C'est moi, {A}. Je t'apporte une galette et un petit pot de beurre. »]]",
+    "[[B:« Tire la chevillette, et la bobinette cherra ! »]] {C} tira la chevillette, ((porte)) et la porte s'ouvrit. Mais en voyant ce gros museau poilu, {B} comprit tout de suite ! ((pause)) Vite, vite, {B|il|elle} sauta hors du lit et se cacha dans la grande armoire.",
+    "{C} ferma la porte, enfila la chemise de nuit et le bonnet de {B}, et se glissa sous les couvertures. [[C/chuchote:« Hé hé hé… Maintenant, j'attends. »]]",
+    "Un peu plus tard, {A} arriva avec son bouquet. ((toc)) [[C/doux:« Qui est là ? »]] {A} trouva que la voix était bien grosse… [[A:« C'est moi, {A} ! Je t'apporte une galette et un petit pot de beurre. »]] [[C/doux:« Tire la chevillette, et la bobinette cherra. »]]",
+    "{A} entra. ((porte)) Dans la chambre, il faisait sombre. {A} s'approcha du lit, et trouva {B} bien étrange. [[A:« Oh, comme vous avez de grandes oreilles ! »]] [[C/doux:« C'est pour mieux t'entendre, mon enfant. »]]",
+    "[[A:« Oh, comme vous avez de grands yeux ! »]] [[C/doux:« C'est pour mieux te voir, mon enfant. »]] [[A/peur:« Oh, comme vous avez de grandes mains ! »]] [[C:« C'est pour mieux t'attraper, mon enfant ! »]]",
+    "[[A/peur:« Et comme vous avez… de grandes dents ! »]] ((pause)) [[C/crie:« C'est pour mieux te manger ! »]] ((loup)) Et {C} bondit hors du lit !",
+    "[[A/crie:« Au secours ! »]] {A} courut autour de la table, {C} juste derrière. ((pause)) Mais à ce moment-là, ((porte)) la porte s'ouvrit en grand. C'était {D}, qui coupait du bois tout près, et qui avait tout entendu !",
+    "[[D/crie:« Ah, te voilà, vilain loup ! »]] {C} eut si peur qu'{C|il|elle} sauta par la fenêtre, ((crac)) traversa la forêt sans se retourner, et ne revint plus jamais.",
+    "Alors, la porte de l'armoire s'ouvrit tout doucement. [[B/chuchote:« Est-il parti ? »]] [[A:« Oui ! Grâce à {D} ! »]] Et {A} se jeta dans les bras de {B}.",
+    "Ils s'assirent tous les trois autour de la table, ((magie)) et partagèrent la galette et le petit pot de beurre. {B} se sentit beaucoup mieux. Le bouquet de fleurs trônait au milieu de la table.",
+    "Depuis ce jour, {A} reste toujours sur le chemin. {A|Il|Elle} ne parle plus jamais aux inconnus… et {A|il|elle} tient toujours ses promesses."
+  ]
+},
+{
+  id:"cochons", title:"Les Trois Petits Cochons", emo:"🐷",
+  roles:[
+    {k:"A", label:"Le premier petit cochon (paille)", def:"Nif-Nif", g:"m", ico:"🌾", p:1.6, r:1.1},
+    {k:"B", label:"Le deuxième petit cochon (bois)", def:"Nouf-Nouf", g:"m", ico:"🪵", p:1.45, r:1.05},
+    {k:"C", label:"Le troisième petit cochon (briques)", def:"Naf-Naf", g:"m", ico:"🧱", p:1.25, r:0.95},
+    {k:"D", label:"Le loup", def:"Grand Loup", g:"m", ico:"🐺", p:0.35, r:0.85}
+  ],
+  extras:{X:{g:"f",p:1,r:0.9}},
+  pages:[
+    "Il était une fois une maman cochonne qui avait trois petits cochons : {A}, {B} et {C}. ((cochon)) Ils vivaient tous ensemble dans une petite ferme, et ils grandissaient, grandissaient…",
+    "Un jour, la maison devint bien trop petite. [[X/doux:« Mes enfants, vous êtes grands maintenant. Il est temps que chacun construise sa propre maison. Mais faites bien attention au loup ! »]] Les trois petits cochons l'embrassèrent, et partirent sur la route.",
+    "En chemin, {A} rencontra un paysan qui portait une botte de paille. [[A:« S'il vous plaît, monsieur, donnez-moi un peu de paille pour construire ma maison ! »]] Et le paysan la lui donna.",
+    "{A} construisit sa maison en un rien de temps. [[A:« Hop, c'est fini ! Maintenant, je vais jouer ! »]] Et {A|il|elle} se mit à chanter : [[A:« Qui a peur du grand méchant loup ? C'est pas nous, c'est pas nous ! »]]",
+    "Plus loin, {B} rencontra un bûcheron qui portait un fagot de bois. [[B:« S'il vous plaît, donnez-moi un peu de bois pour ma maison ! »]] {B} construisit une maison de bois, un peu plus solide, en une seule journée. [[B:« Voilà ! Et maintenant, on danse ! »]]",
+    "{C}, {C|lui|elle}, rencontra un maçon avec une charrette pleine de briques. [[C:« S'il vous plaît, donnez-moi des briques pour ma maison ! »]] Et {C} se mit au travail. Brique après brique. Jour après jour.",
+    "{A} et {B} venaient se moquer. [[A:« Viens jouer avec nous ! »]] [[B:« Tu travailles beaucoup trop ! »]] [[C:« Non. Je construis une maison solide, avec une porte épaisse et une grande cheminée. Avec le loup, on ne sait jamais ! »]]",
+    "Un soir, ((loup)) {D} sortit du bois. {D|Il|Elle} avait très, très faim. {D|Il|Elle} arriva devant la maison de paille, et frappa. ((toc)) [[D/doux:« Petit cochon, petit cochon, laisse-moi entrer ! »]] [[A/peur:« Non, non ! Par les poils de mon petit menton, jamais ! »]]",
+    "[[D/colere:« Alors je vais souffler, et ta maison va s'envoler ! »]] {D} prit une grande inspiration… et souffla ! ((souffle)) La paille s'envola de tous les côtés ! ((cochon)) {A} courut, courut, jusqu'à la maison de {B}.",
+    "Mais {D} les suivit. ((toc)) [[D/doux:« Petits cochons, petits cochons, laissez-moi entrer ! »]] [[B/peur:« Non, non ! Par les poils de nos petits mentons, jamais ! »]] [[D/colere:« Alors je vais souffler, et votre maison va s'envoler ! »]]",
+    "{D} souffla, et souffla encore, plus fort ! ((souffle)) Le bois craqua, ((crac)) et la maison s'écroula ! {A} et {B} filèrent à toute vitesse jusqu'à la maison de briques. [[A/crie:« {C} ! Ouvre vite ! »]]",
+    "{C} les fit entrer, et ferma bien la porte. ((porte)) Bientôt, {D} arriva. ((toc)) [[D/doux:« Petits cochons, petits cochons, laissez-moi entrer ! »]] [[C:« Non, non ! Par les poils de nos petits mentons, jamais ! »]]",
+    "[[D/colere:« Alors je vais souffler, et votre maison va s'envoler ! »]] {D} souffla. ((souffle)) Rien. {D} souffla encore, si fort qu'{D|il|elle} en devint tout rouge. ((souffle)) ((pause)) Mais la maison de briques ne bougea pas d'un poil !",
+    "{D} était furieux. [[D/chuchote:« Puisque c'est comme ça… je vais passer par la cheminée ! »]] Et {D|il|elle} grimpa tout doucement sur le toit.",
+    "Mais {C} l'avait entendu. [[C/chuchote:« Vite, aidez-moi ! »]] Les trois petits cochons mirent une grande marmite d'eau sur le feu, tout en bas de la cheminée. ((pause)) Et l'eau se mit à bouillir…",
+    "{D} se laissa glisser dans la cheminée… et tomba ((crac)) les fesses les premières dans la marmite ! [[D/crie:« Aïe, aïe, aïe ! Ça brûle ! »]] ((loup)) {D} remonta par la cheminée, et s'enfuit dans la forêt pour ne plus jamais revenir.",
+    "[[A:« Merci, {C} ! »]] [[B:« Tu avais raison ! »]] Depuis ce jour, les trois petits cochons vivent ensemble dans la maison de briques. ((cochon)) Et {A} et {B} ont appris qu'un travail bien fait vaut mieux qu'un travail vite fait."
+  ]
+},
+{
+  id:"boucle", title:"Boucle d'or et les trois ours", emo:"🐻",
+  roles:[
+    {k:"A", label:"L'enfant aux cheveux d'or", def:"Boucle d'or", g:"f", ico:"👱", p:1.45, r:1},
+    {k:"B", label:"Papa Ours", def:"Papa Ours", g:"m", ico:"🐻", p:0.3, r:0.85},
+    {k:"C", label:"Maman Ours", def:"Maman Ours", g:"f", ico:"🐻", p:0.85, r:0.9},
+    {k:"D", label:"Petit Ours", def:"Petit Ours", g:"m", ico:"🧸", p:1.8, r:1.05}
+  ],
+  pages:[
+    "Il était une fois, au fond d'une grande forêt, une jolie petite maison où vivaient trois ours. ((ours)) Il y avait {B}, le grand ours, avec une grosse voix. Il y avait {C}, de taille moyenne, avec une voix moyenne. Et il y avait {D}, le tout petit ours, avec une toute petite voix.",
+    "Chacun avait son bol : un grand bol pour {B}, un bol moyen pour {C}, et un tout petit bol pour {D}. Chacun avait sa chaise. Et chacun avait son lit, là-haut, dans la chambre.",
+    "Un matin, {C} prépara une bonne soupe. Mais elle était beaucoup trop chaude. [[B:« Allons faire une promenade dans la forêt, le temps qu'elle refroidisse. »]] [[D:« Oh oui ! »]] Et les trois ours partirent.",
+    "Ce matin-là, dans la forêt, {A|un petit garçon|une petite fille} se promenait. {A|Il|Elle} avait des cheveux tout bouclés, brillants comme de l'or : c'était {A}. ((oiseaux)) {A} cueillait des fleurs et courait après les papillons.",
+    "Soudain, {A} découvrit la petite maison. [[A:« Oh ! Qui peut bien habiter ici ? »]] {A} regarda par la fenêtre : personne. Et la porte n'était pas fermée… ((porte)) Alors {A} entra. Sans frapper !",
+    "Sur la table, il y avait trois bols de soupe. {A} avait très faim. {A|Il|Elle} goûta la soupe du grand bol. [[A:« Aïe ! Trop chaude ! »]] Puis celle du bol moyen. [[A:« Brr… Trop froide ! »]] Puis celle du petit bol. [[A/doux:« Mmm… Juste comme il faut ! »]] Et {A} la mangea toute, jusqu'à la dernière goutte.",
+    "Ensuite, {A} voulut s'asseoir. La grande chaise était trop dure. La chaise moyenne était trop molle. Mais la toute petite chaise était parfaite ! {A} s'assit, se balança… ((pause)) et ((crac)) crac ! La chaise se cassa en mille morceaux. [[A/peur:« Oups ! »]]",
+    "{A} commençait à être {A|fatigué|fatiguée}. {A|Il|Elle} monta l'escalier, et trouva trois lits. Le grand lit était trop haut. Le lit moyen était trop bas. Mais le petit lit était juste comme il faut. [[A/chuchote:« Juste une toute petite sieste… »]] Et {A} s'endormit aussitôt.",
+    "Pendant ce temps, les trois ours rentrèrent de promenade. ((ours)) [[B:« Quelqu'un a goûté à ma soupe ! »]] [[C:« Quelqu'un a goûté à ma soupe ! »]] [[D/triste:« Quelqu'un a goûté à ma soupe… et l'a toute mangée ! »]]",
+    "Puis ils regardèrent leurs chaises. [[B:« Quelqu'un s'est assis sur ma chaise ! »]] [[C:« Quelqu'un s'est assis sur ma chaise ! »]] [[D/triste:« Quelqu'un s'est assis sur ma chaise… et l'a cassée ! »]] Et {D} se mit à pleurer.",
+    "Les trois ours montèrent l'escalier, tout doucement. ((pas)) [[B:« Quelqu'un s'est couché dans mon lit ! »]] [[C:« Quelqu'un s'est couché dans mon lit ! »]] ((pause)) [[D/crie:« Quelqu'un s'est couché dans mon lit… et {A|il|elle} est encore là ! »]]",
+    "La toute petite voix réveilla {A}. {A} ouvrit les yeux, et vit trois ours penchés au-dessus du lit ! ((ours)) [[A/crie:« Oh ! »]] {A} sauta du lit, courut à la fenêtre, sauta dehors, et s'enfuit dans la forêt sans se retourner.",
+    "Une fois rentré{A||e} à la maison, {A} réfléchit longtemps. [[A/triste:« J'ai mangé leur soupe… J'ai cassé la chaise de {D}… Et je ne me suis même pas excusé{A||e}. »]]",
+    "Le lendemain, {A} revint avec un gâteau au miel. ((toc)) Cette fois, {A} frappa à la porte. [[A/doux:« Pardon d'être entré{A||e} sans permission. Je voudrais réparer la chaise. »]]",
+    "[[B/doux:« C'est bien d'être venu{A||e} t'excuser. »]] [[D:« Tu restes jouer avec moi ? »]] Ensemble, ils réparèrent la petite chaise, ((magie)) puis mangèrent le gâteau au miel. Et depuis ce jour, {A} frappe toujours avant d'entrer chez les autres."
+  ]
+},
+{
+  id:"hansel", title:"Hansel et Gretel", emo:"🍭",
+  roles:[
+    {k:"A", label:"Le grand frère", def:"Hansel", g:"m", ico:"👦", p:1.35, r:1},
+    {k:"B", label:"La petite sœur", def:"Gretel", g:"f", ico:"👧", p:1.5, r:1.05},
+    {k:"C", label:"La sorcière", def:"la Sorcière", g:"f", ico:"🧙", p:1.6, r:0.85},
+    {k:"D", label:"Le papa bûcheron", def:"Papa", g:"m", ico:"🪓", p:0.75, r:0.9}
+  ],
+  extras:{X:{g:"f",p:0.8,r:0.95}},
+  pages:[
+    "Il était une fois, au bord d'une immense forêt, un pauvre bûcheron, {D}, qui vivait avec ses deux enfants, {A} et {B}, et leur belle-mère. Ils étaient si pauvres qu'un jour, il ne resta plus qu'un petit morceau de pain dans toute la maison.",
+    "Ce soir-là, les enfants avaient trop faim pour dormir. Ils entendirent la belle-mère parler tout bas. [[X/chuchote:« Demain, nous emmènerons les enfants au fond de la forêt, et nous les y laisserons. Nous n'avons plus de quoi les nourrir. »]] [[D/triste:« Non… Je ne veux pas ! »]] Mais elle insista tant et tant que {D} finit par céder.",
+    "{B} se mit à pleurer. [[A/chuchote:« Ne pleure pas. J'ai une idée. »]] Quand tout le monde fut endormi, {A} se glissa dehors. La lune brillait, et les petits cailloux blancs du chemin brillaient comme des pièces d'argent. {A} en remplit ses poches.",
+    "Le lendemain matin, toute la famille partit dans la forêt. ((oiseaux)) Tout le long du chemin, {A} laissait tomber un petit caillou blanc, puis un autre, puis un autre… Au fond des bois, on alluma un feu. [[X:« Restez ici, les enfants. Nous allons couper du bois, et nous reviendrons vous chercher. »]]",
+    "Mais personne ne revint. ((pause)) La nuit tomba. ((hibou)) {B} avait peur. [[A/doux:« Attends que la lune se lève. »]] Et quand la lune se leva, les petits cailloux blancs se mirent à briller. Main dans la main, les enfants suivirent les cailloux… jusqu'à la maison !",
+    "{D} pleura de joie en les voyant. Mais quelque temps plus tard, il n'y eut de nouveau plus rien à manger. Et la belle-mère voulut recommencer. Cette fois, elle ferma la porte à clé pendant la nuit, et {A} ne put pas ramasser de cailloux.",
+    "Le matin, on donna aux enfants un petit morceau de pain. En chemin, {A} l'émietta dans sa poche, et sema les miettes une à une. Mais cette fois, quand la lune se leva, plus de miettes ! ((oiseaux)) Les oiseaux de la forêt les avaient toutes mangées. [[B/triste:« Comment allons-nous rentrer ? »]]",
+    "Les enfants marchèrent toute la nuit, et tout le jour suivant. Ils avaient faim, ils étaient si fatigués… Soudain, un bel oiseau blanc se mit à chanter, ((oiseaux)) puis s'envola devant eux. Ils le suivirent… jusqu'à une maison extraordinaire.",
+    "Les murs étaient en pain d'épice, le toit en gâteau, et les fenêtres en sucre transparent ! [[A:« Waouh ! Une maison qui se mange ! »]] {A} cassa un morceau du toit, {B} lécha une fenêtre. ((pause)) Alors, une petite voix sortit de la maison. [[C/doux:« Qui grignote, grignote ma maisonnette ? »]]",
+    "La porte s'ouvrit, ((porte)) et une très vieille personne sortit, appuyée sur une canne : c'était {C}. [[C/doux:« Oh, mes pauvres petits chéris ! Entrez donc, entrez. »]] {C} leur servit du lait, des crêpes, des pommes et des noix, puis les coucha dans deux petits lits tout blancs.",
+    "Mais {C} faisait seulement semblant d'être gentil{C||le}. C'était {C|un méchant sorcier|une méchante sorcière}, qui avait construit sa maison en friandises pour attirer les enfants ! ((rire)) {C|Il|Elle} avait les yeux rouges et voyait très mal… mais {C|il|elle} avait un flair de chien.",
+    "Le lendemain matin, {C} attrapa {A} et l'enferma dans une cage. ((porte)) Puis {C|il|elle} secoua {B}. [[C/colere:« Debout, petit{B||e} {B|paresseux|paresseuse} ! Va chercher de l'eau, et fais à manger à {A}. Je veux qu'{A|il|elle} devienne bien {A|gras|grasse} ! »]]",
+    "Chaque matin, {C} venait devant la cage. [[C:« Montre-moi ton doigt, que je voie si tu es assez {A|gras|grasse} ! »]] Mais {A} était {A|malin|maline}, et tendait un petit os. Et {C}, qui voyait si mal, grognait : [[C/colere:« Encore trop {A|maigre|maigre} ! »]]",
+    "Au bout de quatre semaines, {C} perdit patience. [[C/colere:« Tant pis ! Aujourd'hui, j'allume le four ! »]] {B} pleurait à chaudes larmes en portant l'eau. [[B/chuchote:« Si seulement les bêtes de la forêt nous avaient mangés… au moins, nous serions ensemble. »]]",
+    "{C} poussa {B} vers le grand four. [[C/doux:« Penche-toi dedans, et regarde s'il est assez chaud. »]] Mais {B} avait deviné son plan. [[B/doux:« Je ne sais pas comment faire… Montrez-moi ! »]] [[C/colere:« Petite sotte ! Regarde, c'est facile ! »]]",
+    "{C} se pencha dans le four… ((pause)) et {B} poussa de toutes ses forces, ferma la porte de fer, ((porte)) et tira le verrou ! Puis {B} courut jusqu'à la cage. [[B/crie:« {A} ! Nous sommes libres ! »]]",
+    "Dans la maison de {C}, les enfants trouvèrent des coffres pleins de perles et de pierres précieuses. ((magie)) [[A:« C'est encore mieux que des cailloux ! »]] Ils en remplirent leurs poches, et partirent.",
+    "Au bout d'un moment, ils arrivèrent devant une grande rivière, sans aucun pont. ((canard)) Un canard blanc nageait par là. [[B/doux:« Petit canard, petit canard, peux-tu nous porter sur ton dos ? »]] Et le canard les fit traverser, l'un après l'autre.",
+    "Bientôt, la forêt leur parut de plus en plus familière… et ils aperçurent leur maison ! Ils se mirent à courir. {D} était assis, tout seul et bien triste : la belle-mère était partie pour toujours.",
+    "[[D/crie:« Mes enfants ! Mes enfants ! »]] {D} les serra très fort dans ses bras. {B} vida son tablier, {A} vida ses poches : ((magie)) les perles roulèrent sur la table. Leurs soucis étaient terminés, et ils vécurent heureux, tous les trois, pour toujours."
+  ]
+},
+{
+  id:"cendrillon", title:"Cendrillon", emo:"👠",
+  roles:[
+    {k:"A", label:"Cendrillon", def:"Cendrillon", g:"f", ico:"👸", p:1.25, r:0.95},
+    {k:"B", label:"La marraine fée", def:"Marraine", g:"f", ico:"🧚", p:1.5, r:0.92},
+    {k:"C", label:"Le prince", def:"le Prince", g:"m", ico:"🤴", p:0.85, r:0.95},
+    {k:"D", label:"La belle-mère", def:"la Belle-Mère", g:"f", ico:"😠", p:0.75, r:0.9}
+  ],
+  extras:{X:{g:"f",p:1.35,r:1.05}},
+  pages:[
+    "Il était une fois un gentilhomme qui épousa en secondes noces une femme très fière et très sévère : {D}. Elle avait deux filles qui lui ressemblaient en tout. Le gentilhomme, lui, avait un enfant d'une douceur et d'une bonté sans pareilles.",
+    "Dès le mariage, {D} montra sa mauvaise humeur. Elle donna à cet enfant les plus vilaines tâches de la maison : laver la vaisselle, frotter les escaliers, nettoyer les chambres. Le soir, {A|il|elle} allait s'asseoir dans les cendres, au coin de la cheminée. Alors, on {A|le|la} surnomma {A}.",
+    "Les deux sœurs dormaient dans de belles chambres, avec des miroirs où elles se voyaient de la tête aux pieds. {A}, {A|lui|elle}, dormait au grenier, sur une vieille paillasse. Mais {A|il|elle} ne se plaignait jamais.",
+    "Un jour, {C} donna un grand bal, et invita toutes les personnes de qualité. Les deux sœurs furent invitées, elles aussi ! Elles ne parlaient plus que de robes et de coiffures. [[X:« Moi, je mettrai ma robe de velours rouge ! »]] Et c'était {A} qui repassait leurs jupons.",
+    "[[X/colere:« Et toi, {A}, tu aimerais bien aller au bal ? »]] [[A/triste:« Oh… Ce n'est pas pour moi. »]] [[X:« Tu as raison ! On rirait bien de te voir au bal ! »]] Mais {A} était si gentil{A||le} qu'{A|il|elle} les coiffa à merveille.",
+    "Enfin, le grand soir arriva. Les sœurs partirent, ((sabots)) et {A} les suivit des yeux aussi longtemps qu'{A|il|elle} put. Puis {A|il|elle} se mit à pleurer, tout{A||e} {A|seul|seule}, près de la cheminée.",
+    "Soudain, ((magie)) une douce lumière remplit la cuisine. C'était {B}, sa marraine, qui était une fée. [[B/doux:« Pourquoi pleures-tu ? Tu voudrais bien aller au bal, n'est-ce pas ? »]] [[A/triste:« Oh oui… »]] [[B:« Eh bien, sois sage, et je t'y ferai aller ! »]]",
+    "[[B:« Va au jardin, et apporte-moi une citrouille. »]] {B} creusa la citrouille, la toucha de sa baguette… ((magie)) et la citrouille devint un magnifique carrosse doré !",
+    "Dans la souricière, il y avait six souris. ((souris)) À chaque coup de baguette, une souris devint un beau cheval gris. ((sabots)) Un gros rat devint un cocher à grandes moustaches, et six lézards du jardin devinrent six valets en habits brodés.",
+    "Enfin, {B} toucha {A} de sa baguette. ((magie)) Ses vieux habits se changèrent en habits d'or et d'argent, tout brillants de pierreries. Puis {B} lui donna une paire de pantoufles de verre, les plus jolies du monde.",
+    "[[B/doux:« Va, et amuse-toi bien. Mais écoute-moi bien… »]] ((pause)) [[B:« Tu dois rentrer avant minuit ! Une minute de plus, et ton carrosse redeviendra citrouille, tes chevaux des souris, et tes beaux habits, de vieux habits. »]] [[A:« Je te le promets ! »]]",
+    "Quand {A} entra dans la salle de bal, ((magie)) tout le monde se tut. Les violons s'arrêtèrent de jouer. On n'entendait plus qu'un murmure. [[X/chuchote:« Ah, qu'{A|il|elle} est {A|beau|belle} ! Qui est-ce donc ? »]]",
+    "{C} vint {A|le|la} chercher, et dansa avec {A|lui|elle} toute la soirée. {A} alla même s'asseoir près des deux sœurs, et leur offrit des oranges. Elles ne {A|le|la} reconnurent pas du tout ! Puis, à minuit moins le quart, {A} fit une belle révérence, et rentra vite à la maison.",
+    "Le lendemain soir, il y eut un second bal. {A} y alla encore, plus {A|beau|belle} que la veille. {C} ne {A|le|la} quitta pas un instant, et lui disait mille choses gentilles. {A} s'amusait tant… ((pause)) qu'{A|il|elle} oublia l'heure !",
+    "Soudain : ((cloche)) le premier coup de minuit ! [[A/peur:« Oh non ! »]] {A} se leva et s'enfuit, légère comme une biche. {C} courut derrière, mais ne put {A|le|la} rattraper. Dans l'escalier, {A} perdit une de ses pantoufles de verre.",
+    "En bas de l'escalier, ((magie)) la magie s'arrêta. {A} rentra à pied, tout{A||e} {A|essoufflé|essoufflée}, dans ses vieux habits. Il ne lui restait qu'une seule chose : l'autre pantoufle de verre.",
+    "{C} avait ramassé la pantoufle. [[C:« J'épouserai la personne à qui appartient cette pantoufle ! »]] On l'essaya aux princesses, aux duchesses, à toute la cour… Mais personne ne pouvait la chausser.",
+    "On l'apporta enfin chez {D}. Les deux sœurs firent tout leur possible. Elles poussèrent, tirèrent, forcèrent… [[X/colere:« Aïe ! Elle est bien trop petite ! »]] Impossible !",
+    "{A}, qui regardait, dit en souriant : [[A/doux:« Et si j'essayais, moi ? »]] [[D/colere:« Toi ? Ha ! Retourne donc à tes cendres ! »]] Mais le gentilhomme qui portait la pantoufle répondit que tout le monde devait l'essayer.",
+    "{A} s'assit, et approcha son pied… ((pause)) La pantoufle glissa sans aucune peine, comme si elle avait été faite exprès ! ((magie)) Alors, {A} sortit de sa poche l'autre pantoufle, et la mit à son autre pied.",
+    "À cet instant, ((magie)) {B} apparut et toucha {A} de sa baguette. Ses habits devinrent encore plus magnifiques que ceux du bal ! Les deux sœurs reconnurent enfin la personne du bal, et se jetèrent à ses pieds pour demander pardon.",
+    "{A} les releva. [[A/doux:« Je vous pardonne de tout mon cœur. »]] Quelques jours plus tard, {A} et {C} se marièrent au château. Et {A}, qui était aussi bon{A||ne} que {A|beau|belle}, fit venir ses deux sœurs au château, pour qu'elles soient heureuses, elles aussi."
+  ]
+},
+{
+  id:"chatbotte", title:"Le Chat botté", emo:"🐈",
+  roles:[
+    {k:"A", label:"Le chat", def:"le Chat Botté", g:"m", ico:"🐈", p:1.3, r:1.05},
+    {k:"B", label:"Le jeune maître du chat", def:"Pierre", g:"m", ico:"🧑", p:1, r:0.95},
+    {k:"C", label:"Le roi", def:"le Roi", g:"m", ico:"👑", p:0.7, r:0.88},
+    {k:"D", label:"L'ogre", def:"l'Ogre", g:"m", ico:"👹", p:0.2, r:0.8}
+  ],
+  extras:{X:{g:"m",p:0.9,r:1}},
+  pages:[
+    "Il était une fois un meunier qui avait trois enfants. Quand il mourut, il ne leur laissa que trois choses : son moulin, son âne, et son chat. L'aîné prit le moulin. Le deuxième prit l'âne. Et le plus jeune, {B}, n'eut que le chat.",
+    "[[B/triste:« Mes frères pourront gagner leur vie avec le moulin et l'âne. Mais moi ? Que vais-je faire d'un chat ? Je n'ai même pas de quoi manger ! »]] Mais le chat avait tout entendu. ((chat)) C'était {A}… et {A|il|elle} savait parler !",
+    "[[A/doux:« Ne t'inquiète pas, mon maître. Donne-moi seulement un sac, et une paire de bottes pour courir dans les broussailles. Tu verras que tu n'es pas si mal loti. »]] {B} n'y croyait pas trop. Mais {A} avait l'air si {A|malin|maline} que {B} décida de lui faire confiance.",
+    "Avec ses belles bottes, {A} se sentait très {A|élégant|élégante}. {A|Il|Elle} mit de la laitue dans le sac, et s'allongea dans l'herbe sans bouger. ((pause)) Bientôt, un jeune lapin curieux entra dans le sac… et hop ! {A} tira les cordons.",
+    "{A} s'en alla tout fier au château. ((toc)) On l'emmena devant {C}. {A} fit une grande révérence. [[A:« Sire, voici un lapin, que mon maître, le Marquis de Carabas, m'a chargé de vous offrir. »]] [[C:« Dis à ton maître que je le remercie, et que cela me fait grand plaisir. »]]",
+    "Une autre fois, {A} se cacha dans un champ de blé, et attrapa deux perdrix. ((oiseaux)) {A|Il|Elle} les offrit à {C}, toujours de la part du Marquis de Carabas. Et cela dura deux ou trois mois : {A} apportait sans cesse des cadeaux au château.",
+    "Un jour, {A} apprit que {C} allait se promener au bord de la rivière, avec sa fille, la plus belle princesse du monde. [[A/chuchote:« Mon maître, fais ce que je te dis, et ta fortune est faite. Va te baigner dans la rivière, à l'endroit que je vais te montrer. »]] {B} obéit, sans comprendre pourquoi.",
+    "Pendant que {B} se baignait, ((sabots)) le carrosse de {C} arriva. {A} se mit à crier de toutes ses forces : [[A/crie:« Au secours ! Au secours ! Monsieur le Marquis de Carabas est en train de se noyer ! »]]",
+    "{C} reconnut {A}, qui lui avait apporté tant de cadeaux, et ordonna à ses gardes de sauver le Marquis. {A} expliqua que des voleurs avaient emporté les habits de son maître. En réalité, {A} les avait cachés sous une grosse pierre !",
+    "{C} fit apporter les plus beaux habits du château. Ainsi habillé, {B} avait fière allure ! La princesse le trouva tout à fait à son goût. [[C:« Monsieur le Marquis, montez donc dans mon carrosse ! »]]",
+    "{A}, {A|ravi|ravie}, courut devant le carrosse. {A|Il|Elle} rencontra des paysans qui fauchaient un pré. [[A:« Bonnes gens, quand le roi passera, dites-lui que ce pré appartient à Monsieur le Marquis de Carabas ! »]]",
+    "Quand le carrosse passa, {C} demanda : [[C:« À qui est ce pré ? »]] [[X:« À Monsieur le Marquis de Carabas ! »]] répondirent tous les paysans. Plus loin, ce fut la même chose avec les moissonneurs. [[X:« Ces blés sont à Monsieur le Marquis de Carabas ! »]] Et {C} était de plus en plus impressionné.",
+    "Enfin, {A} arriva devant un magnifique château. C'était celui de {D}, l'ogre le plus riche qu'on ait jamais vu : toutes les terres que le roi avait traversées étaient à {D|lui|elle} ! ((pas)) {A} demanda poliment à {D|le|la} rencontrer.",
+    "[[A:« On m'a dit que vous pouviez vous changer en toutes sortes d'animaux. En lion, par exemple ? »]] [[D/colere:« C'est vrai ! Et pour te le prouver, regarde bien ! »]] ((lion)) Et {D} se changea en un énorme lion !",
+    "{A} eut si peur qu'{A|il|elle} grimpa jusqu'aux gouttières, ce qui n'était pas facile avec des bottes ! Quand {D} reprit sa forme normale, {A} redescendit. [[A:« J'ai eu bien peur ! Mais on dit aussi que vous pouvez devenir un tout petit animal… une souris, par exemple. Ça, je crois que c'est impossible ! »]]",
+    "[[D/colere:« Impossible ? Tu vas voir ! »]] Et {D} se changea en une toute petite souris, ((souris)) qui se mit à courir sur le plancher. ((pause)) {A} ne fit qu'un bond… ((chat)) et l'attrapa ! Et {D} ne fit plus jamais peur à personne.",
+    "Juste à ce moment, ((sabots)) le carrosse arriva devant le pont du château. {A} courut au-devant. [[A:« Votre Majesté, soyez la bienvenue dans le château de Monsieur le Marquis de Carabas ! »]] [[C:« Comment, Monsieur le Marquis ? Ce château est aussi à vous ? Je n'ai jamais rien vu d'aussi beau ! »]]",
+    "Ils entrèrent dans une grande salle, où un magnifique festin était servi. ((magie)) {C} était charmé par les bonnes manières du Marquis, et la princesse était tombée amoureuse. [[C:« Monsieur le Marquis, voudriez-vous épouser ma fille ? »]]",
+    "{B} accepta avec joie, et le mariage fut célébré le jour même. Quant à {A}, {A|il|elle} devint un grand seigneur, et ne courut plus jamais après les souris… sauf pour s'amuser ! ((chat))"
+  ]
+},
+{
+  id:"haricot", title:"Jacques et le haricot magique", emo:"🌱",
+  roles:[
+    {k:"A", label:"Jacques", def:"Jacques", g:"m", ico:"👦", p:1.35, r:1},
+    {k:"B", label:"La maman de Jacques", def:"Maman", g:"f", ico:"👩", p:1, r:0.95},
+    {k:"C", label:"Le géant", def:"le Géant", g:"m", ico:"🧌", p:0.1, r:0.78},
+    {k:"D", label:"La poule aux œufs d'or", def:"Cocotte", g:"f", ico:"🐔", p:1.8, r:1.1}
+  ],
+  extras:{X:{g:"m",p:0.6,r:0.85}, Y:{g:"f",p:0.9,r:0.92}},
+  pages:[
+    "Il était une fois {A}, qui vivait avec {B} dans une petite maison, au bord d'un chemin. Ils étaient très pauvres. Leur seul trésor était une vache, qui leur donnait du lait chaque matin.",
+    "Mais un matin, ((vache)) la vache ne donna plus une seule goutte de lait. [[B/triste:« Il faut la vendre au marché. Avec l'argent, nous pourrons acheter à manger. Va, {A}, et tâche d'en tirer un bon prix. »]]",
+    "Sur la route, {A} rencontra un drôle de petit vieillard. [[X:« Bonjour, {A}. Où vas-tu avec cette vache ? »]] [[A:« Au marché, pour la vendre. »]] [[X/chuchote:« Je te l'échange contre ceci… »]] Et il ouvrit la main : il y avait cinq haricots de toutes les couleurs.",
+    "[[X/chuchote:« Ce sont des haricots magiques. Si tu les plantes ce soir, demain matin, ils auront poussé jusqu'au ciel. »]] {A} trouva l'idée merveilleuse. {A|Il|Elle} donna la vache, et rentra en courant, les haricots dans la main.",
+    "[[A:« Maman ! Regarde ce que j'ai eu pour la vache ! »]] ((pause)) [[B/colere:« Quoi ? Cinq haricots ? Pour notre belle vache ? »]] {B} les jeta par la fenêtre, et envoya {A} au lit sans souper.",
+    "Le lendemain matin, la chambre était toute verte. {A} courut à la fenêtre… ((magie)) Une énorme tige de haricot avait poussé pendant la nuit ! Elle montait, montait, montait, et disparaissait dans les nuages.",
+    "{A} grimpa, grimpa, grimpa, jusqu'en haut. Là, au-dessus des nuages, s'étendait une longue route blanche, qui menait à un château immense. Devant la porte se tenait une femme très, très grande.",
+    "[[A:« Bonjour, madame. Auriez-vous quelque chose à manger ? J'ai si faim ! »]] [[Y/peur:« Mon pauvre enfant, sauve-toi vite ! Mon mari est un géant, et il n'aime pas du tout les enfants ! »]] Mais la grande femme eut pitié, et lui donna du pain et du fromage.",
+    "Soudain : ((pas)) boum ! boum ! boum ! Tout le château trembla. [[Y/chuchote:« C'est lui ! Vite, cache-toi dans le four ! »]] {C} entra. [[C/colere:« Hum, hum ! Ça sent la chair fraîche ! »]] [[Y/doux:« Mais non, c'est le ragoût d'hier. Assieds-toi, et mange. »]]",
+    "Après le repas, {C} sortit de grands sacs pleins de pièces d'or, et se mit à les compter. ((magie)) Puis {C|il|elle} bâilla, et s'endormit, ((ronfle)) en ronflant si fort que les murs tremblaient. {A} sortit doucement du four, prit un sac d'or, et courut jusqu'à la tige.",
+    "{A} redescendit, et jeta le sac d'or dans le jardin. [[B:« {A} ! Mais d'où vient tout cet or ? »]] Pendant longtemps, {A} et {B} vécurent bien. Mais un jour, il ne resta plus une seule pièce. Alors {A} grimpa de nouveau tout en haut de la tige.",
+    "Cette fois encore, la grande femme cacha {A}. ((pas)) {C} rentra, mangea trois bœufs rôtis, puis cria : [[C:« Femme ! Apporte-moi ma poule ! »]] Elle apporta une jolie poule rousse : c'était {D}. [[C:« Ponds ! »]] ((poule)) Et {D} pondit un œuf… tout en or !",
+    "Bientôt, {C} s'endormit. ((ronfle)) {A} sortit de sa cachette, prit {D} sous son bras, et fila. [[D/chuchote:« Où m'emmènes-tu ? »]] [[A/chuchote:« Chez moi. Tu verras, tu y seras bien mieux {D|traité|traitée} ! »]]",
+    "Avec les œufs d'or de {D}, {A} et {B} ne manquaient plus de rien. Mais {A} était {A|curieux|curieuse}, et voulut retourner une dernière fois au château. Cette fois, {A|il|elle} se cacha tout {A|seul|seule}, dans un grand chaudron.",
+    "((pas)) {C} rentra en reniflant. [[C/colere:« Ça sent la chair fraîche ! J'en suis sûr ! »]] {C} chercha partout… sauf dans le chaudron ! Puis {C|il|elle} cria : [[C:« Femme ! Apporte-moi ma harpe d'or ! »]]",
+    "Elle posa sur la table une harpe toute en or. [[C:« Chante ! »]] ((harpe)) Et la harpe se mit à jouer toute seule, une musique si douce que {C} s'endormit aussitôt. ((ronfle))",
+    "{A} sortit du chaudron, et attrapa la harpe… Mais la harpe se mit à crier : [[N/crie:« Maître ! Maître ! »]] {C} se réveilla en sursaut. [[C/colere:« Reviens ici, petit voleur ! »]]",
+    "{A} courut jusqu'à la tige, et descendit à toute vitesse. ((pas)) {C} descendait derrière, et toute la tige tremblait ! [[A/crie:« Maman ! Vite, la hache ! »]]",
+    "{B} apporta la hache. {A} sauta à terre, et donna un grand coup, ((crac)) puis un autre, puis un autre… ((crac)) La tige se cassa ! {C} remonta à toute vitesse dans ses nuages, et ne redescendit plus jamais.",
+    "Avec les œufs d'or de {D} et la jolie musique de la harpe, ((harpe)) {A} et {B} vécurent heureux pour toujours. Et {D} eut le plus beau poulailler du monde ! ((poule))"
+  ]
+},
+{
+  id:"canard", title:"Le Vilain Petit Canard", emo:"🦢",
+  roles:[
+    {k:"A", label:"Le petit canard", def:"Petit Canard", g:"m", ico:"🐣", p:1.6, r:1},
+    {k:"B", label:"Maman Cane", def:"Maman Cane", g:"f", ico:"🦆", p:1.1, r:0.95},
+    {k:"C", label:"Le vieux chat", def:"Minou", g:"m", ico:"🐱", p:0.7, r:0.88},
+    {k:"D", label:"Le cygne ami", def:"Beau Cygne", g:"m", ico:"🦢", p:1, r:0.88}
+  ],
+  extras:{X:{g:"f",p:1.45,r:1.05}},
+  pages:[
+    "C'était l'été. Il faisait beau à la campagne. ((oiseaux)) Le blé était doré, et près d'un vieux château, au bord d'un étang, {B} couvait ses œufs, bien cachée sous les grandes feuilles.",
+    "Enfin, ((crac)) crac, crac ! Les œufs s'ouvrirent un à un. ((canard)) Les petits canetons jaunes sortaient la tête. [[B/doux:« Comme le monde est grand, mes enfants ! »]] Mais le plus gros des œufs n'avait pas encore éclos.",
+    "Une vieille cane passa par là. [[X:« C'est sûrement un œuf de dinde ! Laisse-le donc, et apprends plutôt à nager à tes enfants. »]] [[B:« Je vais le couver encore un peu. »]] Et {B} patienta.",
+    "Enfin, le gros œuf craqua. ((crac)) Il en sortit un caneton tout gris, tout grand, et bien maladroit : c'était {A}. [[B/triste:« Comme {A|il|elle} est grand{A||e} ! {A|Il|Elle} ne ressemble à aucun des autres… »]]",
+    "Le lendemain, {B} mena toute sa famille à l'étang. Plouf ! Elle sauta dans l'eau, et les petits sautèrent derrière elle. {A} nageait très bien, mieux que tous les autres ! [[B/doux:« Comme {A|il|elle} se tient droit{A||e} ! C'est mon petit à moi. »]]",
+    "Mais dans la basse-cour, ce fut terrible. ((poule)) [[X/colere:« Regardez celui-là ! Qu'il est laid ! On ne veut pas de lui ici ! »]] Les canards {A|le|la} mordaient, les poules {A|le|la} picoraient, et le dindon se gonflait comme un ballon pour lui faire peur.",
+    "Chaque jour, c'était pire. Même ses frères et sœurs se moquaient de {A}. [[A/triste:« Personne ne veut de moi… »]] Alors un matin, {A} s'envola par-dessus la haie. ((oiseaux)) Les petits oiseaux des buissons s'envolèrent de peur. [[A/triste:« C'est parce que je suis si {A|laid|laide}… »]]",
+    "{A} arriva dans un grand marais, où vivaient des canards sauvages. ((canard)) [[X:« Tu es drôlement {A|laid|laide} ! Mais ça nous est bien égal. »]] {A} ne demandait rien. {A|Il|Elle} voulait seulement se reposer, et boire un peu d'eau du marais.",
+    "Mais un jour, ((chien)) des chiens arrivèrent en aboyant, et tous les oiseaux s'envolèrent. {A} se cacha sous les roseaux, sans bouger, le cœur battant. Un gros chien passa tout près… renifla… et repartit. [[A/chuchote:« Je suis si {A|laid|laide} que même le chien ne veut pas de moi… »]]",
+    "Le soir, {A} s'enfuit. Le vent soufflait. ((souffle)) {A} arriva devant une petite cabane, où vivaient une vieille femme, une poule, et un vieux chat : {C}. ((chat)) La vieille femme voyait mal. [[X:« Oh, une belle cane ! Elle va me pondre des œufs ! »]]",
+    "Mais {A} ne pondait pas d'œufs. {C} et la poule se croyaient très importants. [[C:« Sais-tu faire le gros dos et ronronner ? »]] [[A:« Non… »]] [[C:« Sais-tu attraper des souris ? »]] [[A:« Non… Mais j'aime tant nager, et plonger la tête sous l'eau ! »]] [[C/colere:« Nager ? Quelle idée ridicule ! »]]",
+    "Alors {A} repartit. L'automne arriva. Les feuilles devinrent jaunes et brunes. Un soir, au coucher du soleil, une troupe de grands oiseaux magnifiques sortit des buissons. ((cygne)) Ils étaient d'un blanc éclatant, avec de longs cous souples. C'étaient des cygnes.",
+    "Ils déployèrent leurs grandes ailes, et s'envolèrent vers les pays chauds. {A} les regarda monter, monter dans le ciel, et sentit son cœur battre très fort. [[A/doux:« Comme ils sont beaux… »]] {A} ne savait pas leur nom. Mais {A|il|elle} les aimait déjà.",
+    "Puis l'hiver arriva, très froid. ((souffle)) {A} devait nager sans cesse, pour que l'eau ne gèle pas autour de {A|lui|elle}. Mais une nuit, {A} fut trop {A|fatigué|fatiguée}… et la glace l'emprisonna.",
+    "Au matin, un paysan passa. Il cassa la glace avec son sabot, ((crac)) prit {A} dans ses bras, et l'emporta chez lui, près du feu. Mais les enfants voulurent jouer, et {A}, qui avait peur, renversa le lait et la farine ! Alors, {A} s'enfuit dans la neige.",
+    "Il serait trop triste de raconter tout ce que {A} endura pendant ce long hiver. ((pause)) Mais enfin, ((oiseaux)) le soleil se remit à briller. Les alouettes chantaient. C'était le printemps !",
+    "{A} ouvrit ses ailes : elles étaient devenues grandes et fortes, et l'emportèrent dans le ciel ! Bientôt, {A} arriva dans un grand jardin, où les pommiers étaient en fleurs. Et sur l'eau, trois beaux cygnes blancs nageaient doucement. ((cygne))",
+    "[[A/triste:« Je vais aller vers eux. Ils vont sûrement me chasser, parce que je suis si {A|laid|laide}… Tant pis. »]] {A} se posa sur l'eau, et nagea vers les cygnes, la tête baissée… ((pause)) et vit son reflet dans l'eau claire.",
+    "Ce n'était plus un oiseau gris, maladroit et {A|laid|laide}. ((magie)) C'était un cygne ! Un magnifique cygne blanc ! Peu importe d'être né dans une basse-cour, quand on est sorti d'un œuf de cygne.",
+    "Les grands cygnes nagèrent autour de {A}, et {A|le|la} caressèrent avec leur bec. [[D/doux:« Bienvenue parmi nous, {A}. »]] Des enfants arrivèrent dans le jardin. [[X:« Regardez ! Il y en a un nouveau ! C'est le plus beau de tous ! »]]",
+    "{A} se sentit tout timide, et cacha sa tête sous son aile. ((pause)) [[A/doux:« Je n'aurais jamais rêvé d'un tel bonheur, quand je n'étais que le vilain petit canard. »]] Et {A} déploya ses grandes ailes, le cœur plein de joie."
+  ]
+}
+];
+
+const SND_EMO={loup:"🐺",cochon:"🐷",ours:"🐻",canard:"🦆",chat:"🐱",poule:"🐔",toc:"✊",porte:"🚪",cloche:"🔔",souffle:"💨",magie:"✨",crac:"💥",pas:"👣",oiseaux:"🐦",rire:"🧙",sabots:"🐴",lion:"🦁",souris:"🐭",vache:"🐮",ronfle:"💤",hibou:"🦉",chien:"🐕",cygne:"🦢",harpe:"🎵"};
+
+// ---------- état ----------
+let tale=null, cast={}, pageIdx=0;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function lsGet(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+function show(id){["home","cast","read","studio"].forEach(s=>$(s).classList.toggle("hidden",s!==id));stopAll();
+  if(id!=="read"){try{stopMusic();stopAmb()}catch(e){}}
+  window.scrollTo(0,0)}
+document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>show(b.dataset.go));
+
+// ---------- accueil ----------
+$("grid").innerHTML=TALES.map(t=>`<button class="tale" data-id="${t.id}"><span class="emo">${t.emo}</span><div class="t">${t.title}</div><div class="n">${t.roles.length} personnages</div></button>`).join("");
+$("grid").querySelectorAll(".tale").forEach(b=>b.onclick=()=>openCast(b.dataset.id));
+
+// ---------- distribution ----------
+function openCast(id){
+  tale=TALES.find(t=>t.id===id);
+  const saved=lsGet("contes-cast",{})[id]||{};
+  cast={};
+  tale.roles.forEach(r=>cast[r.k]={name:(saved[r.k]&&saved[r.k].name)||"",g:(saved[r.k]&&saved[r.k].g)||r.g});
+  $("castEmo").textContent=tale.emo; $("castTitle").textContent=tale.title;
+  renderRoles(); show("cast");
+}
+function renderRoles(){
+  $("roles").innerHTML=tale.roles.map(r=>`
+    <div class="role">
+      <div class="ico">${r.ico}</div>
+      <div class="info">
+        <label for="in-${r.k}">Qui joue : <b>${r.label}</b> ?</label>
+        <input id="in-${r.k}" data-k="${r.k}" placeholder="${esc(r.def)}" value="${esc(cast[r.k].name)}" maxlength="30" autocomplete="off">
+      </div>
+      <div class="gender" data-k="${r.k}">
+        <button data-g="m" class="${cast[r.k].g==="m"?"on":""}">👦 Garçon</button>
+        <button data-g="f" class="${cast[r.k].g==="f"?"on":""}">👧 Fille</button>
+      </div>
+    </div>`).join("");
+  $("roles").querySelectorAll("input").forEach(i=>i.oninput=()=>cast[i.dataset.k].name=i.value);
+  $("roles").querySelectorAll(".gender button").forEach(b=>b.onclick=()=>{
+    const k=b.parentElement.dataset.k; cast[k].g=b.dataset.g;
+    b.parentElement.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
+  });
+}
+$("resetBtn").onclick=()=>{tale.roles.forEach(r=>cast[r.k]={name:"",g:r.g});renderRoles()};
+$("startBtn").onclick=()=>{
+  const all=lsGet("contes-cast",{}); all[tale.id]=cast; lsSet("contes-cast",all);
+  unlockAudio(); pageIdx=0; show("read"); renderBook(true);
+  startMusic(); intro();
+};
+$("toCast").onclick=()=>{renderRoles();show("cast")};
+
+// ---------- texte ----------
+function nameOf(k){const r=tale.roles.find(x=>x.k===k);return (cast[k].name||"").trim()||r.def}
+function genders(t){return t.replace(/\{([A-D])\|([^|}]*)\|([^}]*)\}/g,(_,k,m,f)=>cast[k].g==="m"?m:f)}
+function plain(t){return genders(t).replace(/\{([A-D])\}/g,(_,k)=>nameOf(k))}
+function rich(t){
+  const s=genders(t).replace(/\{([A-D])\}/g,(_,k)=>"\u0000"+k+"\u0001");
+  return esc(s).replace(/\u0000([A-D])\u0001/g,(_,k)=>`<span class="nm">${esc(nameOf(k))}</span>`);
+}
+// découpe une page en segments : narration / réplique / bruitage
+function segments(page){
+  const out=[]; const re=/\[\[([A-DXYN])(?:\/(\w+))?:([\s\S]*?)\]\]|\(\((\w+)\)\)/g; let last=0,m;
+  const pushN=t=>{if(t.trim())out.push({type:"n",raw:t})};
+  while((m=re.exec(page))){
+    pushN(page.slice(last,m.index));
+    if(m[1]==="N") out.push({type:"n",raw:m[3],style:m[2]});
+    else if(m[1]) out.push({type:"s",k:m[1],raw:m[3],style:m[2]});
+    else if(m[4]==="pause") out.push({type:"pause"});
+    else out.push({type:"fx",name:m[4]});
+    last=re.lastIndex;
+  }
+  pushN(page.slice(last));
+  return out;
+}
+function cap(html){return html.replace(/^(\s*(?:<span class="nm">)?)(\S)/,(m,a,c)=>a+c.toUpperCase())}
+
+function renderBook(turn){
+  try{updateCost()}catch(e){}
+  $("bookEmo").textContent=tale.emo; $("bookTitle").textContent=tale.title;
+  renderScene();
+  if(turn){const pg=$("page");pg.classList.remove("turn");void pg.offsetWidth;pg.classList.add("turn");flip();burst(innerWidth/2,innerHeight*.45,14)}
+  $("bookCast").innerHTML=tale.roles.map(r=>`${r.ico} ${esc(nameOf(r.k))}`).join(" · ");
+  const segs=segments(tale.pages[pageIdx]);
+  let html=segs.map((s,i)=>{
+    if(s.type==="pause") return "";
+    if(s.type==="fx") return `<button class="snd" data-i="${i}" data-fx="${s.name}" aria-label="bruitage ${s.name}">${SND_EMO[s.name]||"🔈"}</button>`;
+    const h=rich(s.raw);
+    return `<span class="seg ${s.type==="s"?"say":""}" data-i="${i}">${h}</span>`;
+  }).join(" ");
+  html=`<p>${cap(html)}</p>`;
+  if(pageIdx===tale.pages.length-1) html+=`<div class="fin">✨ Fin ✨</div>`;
+  $("page").innerHTML=html;
+  $("page").querySelectorAll(".snd").forEach(b=>b.onclick=e=>{e.stopPropagation();unlockAudio();playFx(b.dataset.fx,true)});
+  $("dots").innerHTML=tale.pages.map((_,i)=>`<span class="dot ${i===pageIdx?"on":""}"></span>`).join("");
+  $("prev").disabled=pageIdx===0; $("next").disabled=pageIdx===tale.pages.length-1;
+  if(pageIdx===tale.pages.length-1&&mode!=="story") setTimeout(celebrate,500);
+}
+function go(d){const n=pageIdx+d;if(n<0||n>=tale.pages.length)return;stopAll();pageIdx=n;renderBook(true)}
+$("prev").onclick=()=>go(-1); $("next").onclick=()=>go(1);
+document.addEventListener("keydown",e=>{if($("read").classList.contains("hidden"))return;if(e.key==="ArrowRight")go(1);if(e.key==="ArrowLeft")go(-1)});
+let sx=null;$("page").addEventListener("touchstart",e=>sx=e.touches[0].clientX,{passive:true});
+$("page").addEventListener("touchend",e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx;if(dx<-50)go(1);if(dx>50)go(-1);sx=null});
+
+// ---------- voix ----------
+const hasTTS=("speechSynthesis" in window);
+let voices=[], narrator=null, maleVoice=null;
+const FEM=/am[ée]lie|audrey|aur[ée]lie|marie|julie|denise|hortense|[ée]lo[iï]se|[ée]lise|virginie|c[ée]line|chantal|sylvie|vivienne|brigitte|charlotte|jos[ée]phine|coralie|ariane|female|femme|google fran/i;
+const MAL=/thomas|henri|paul|daniel|nicolas|jacques|antoine|claude|guillaume|r[ée]my|male|homme|fr[ée]d[ée]ric|g[ée]rard|yves|alain|mathieu|jean|remi|jerome|j[ée]r[ôo]me/i;
+const QUAL=/premium|enhanced|am[ée]lior|natural|neural|online|wavenet|studio/i;
+const NOVELTY=/eddy|\bflo\b|grandma|grandpa|grand-m[eè]re|grand-p[eè]re|\breed\b|rocko|sandy|shelley|bahh|bells|boing|bubbles|cellos|wobble|jester|organ|superstar|trinoids|whisper|zarvox|albert|bad news|good news|hysterical/i;
+const vid=v=>v.name+" "+(v.voiceURI||"");
+function isQual(v){return QUAL.test(vid(v))||(/google/i.test(v.name)&&v.localService===false)}
+function score(v,wantFem){const id=vid(v);let s=0;
+  if(/fr[-_]FR/i.test(v.lang))s+=4;else if(/^fr/i.test(v.lang))s+=2;
+  if(isQual(v))s+=6; if(/compact/i.test(id))s-=2; if(NOVELTY.test(v.name))s-=30;
+  const f=FEM.test(v.name),m=MAL.test(v.name)&&!f;
+  if(wantFem){if(f)s+=5;if(m)s-=8}else{if(m)s+=5;if(f)s-=8}
+  return s}
+let allVoices=[];
+const LANGS={fr:"Français",en:"Anglais",es:"Espagnol",it:"Italien",de:"Allemand",pt:"Portugais",nl:"Néerlandais",ar:"Arabe",zh:"Chinois",ja:"Japonais",ko:"Coréen",ru:"Russe",tr:"Turc",pl:"Polonais",sv:"Suédois",da:"Danois",nb:"Norvégien",no:"Norvégien",fi:"Finnois",el:"Grec",he:"Hébreu",hi:"Hindi",id:"Indonésien",th:"Thaï",cs:"Tchèque",sk:"Slovaque",hu:"Hongrois",ro:"Roumain",uk:"Ukrainien",vi:"Vietnamien",ms:"Malais",ca:"Catalan",hr:"Croate",bg:"Bulgare"};
+const REGION={FR:"France",CA:"Canada",BE:"Belgique",CH:"Suisse",US:"États-Unis",GB:"Royaume-Uni",AU:"Australie",IE:"Irlande",IN:"Inde",ZA:"Afrique du Sud",ES:"Espagne",MX:"Mexique",BR:"Brésil",PT:"Portugal"};
+function langLabel(l){const [a,b]=(l||"").split(/[-_]/);return (LANGS[(a||"").toLowerCase()]||l||"?")+(b&&REGION[b.toUpperCase()]?" ("+REGION[b.toUpperCase()]+")":"")}
+function optList(list,sel){
+  const groups={};list.forEach(v=>{const g=langLabel(v.lang);(groups[g]=groups[g]||[]).push(v)});
+  const rank=g=>/^Français \(France\)/.test(g)?0:/^Français/.test(g)?1:2;
+  const names=Object.keys(groups).sort((x,y)=>(rank(x)-rank(y))||x.localeCompare(y));
+  return names.map(g=>`<optgroup label="${esc(g)} — ${groups[g].length}">${groups[g].map(v=>
+    `<option value="${esc(v.voiceURI||v.name)}" ${sel&&v===sel?"selected":""}>${isQual(v)?"⭐ ":""}${esc(v.name)}${NOVELTY.test(v.name)?" 🎭":""}</option>`).join("")}</optgroup>`).join("");
+}
+function findVoice(id){return allVoices.find(v=>(v.voiceURI||v.name)===id)||allVoices.find(v=>v.name===id)}
+function loadVoices(){
+  if(!hasTTS)return;
+  allVoices=speechSynthesis.getVoices().slice();
+  voices=allVoices.filter(v=>/^fr/i.test(v.lang)&&!NOVELTY.test(v.name));
+  const fem=[...voices].sort((a,b)=>score(b,true)-score(a,true));
+  const mal=[...voices].sort((a,b)=>score(b,false)-score(a,false));
+  narrator=findVoice(lsGet("contes-voice",""))||fem[0]||null;
+  const savedMale=lsGet("contes-male","");
+  maleVoice=savedMale==="none"?null:(findVoice(savedMale)||((mal[0]&&score(mal[0],false)>4&&mal[0]!==narrator)?mal[0]:null));
+  // tri : français d'abord, puis par qualité
+  const sorted=[...allVoices].sort((a,b)=>score(b,true)-score(a,true));
+  $("voiceSel").innerHTML=allVoices.length?optList(sorted,narrator):`<option>Voix par défaut du téléphone</option>`;
+  $("maleSel").innerHTML=`<option value="none" ${!maleVoice?"selected":""}>Même voix que la conteuse (plus grave)</option>`+optList([...allVoices].sort((a,b)=>score(b,false)-score(a,false)),maleVoice);
+  const nfr=allVoices.filter(v=>/^fr/i.test(v.lang)).length;
+  $("voiceCount").textContent=allVoices.length?`${allVoices.length} voix trouvées sur ce téléphone, dont ${nfr} en français. ⭐ = voix naturelle, 🎭 = voix rigolote.`:"Aucune voix trouvée pour l'instant…";
+  updateVoiceTip();
+}
+function updateVoiceTip(){const tip=$("voiceTip");if(!tip)return;
+  tip.classList.toggle("hidden",!hasTTS||lsGet("contes-tipoff",false)||!!(narrator&&isQual(narrator)))}
+if(hasTTS){loadVoices();try{speechSynthesis.onvoiceschanged=loadVoices}catch(e){}
+  // certains téléphones donnent la liste des voix en retard
+  let tries=0;const iv=setInterval(()=>{tries++;const n=speechSynthesis.getVoices().length;if(n!==allVoices.length)loadVoices();if(tries>20)clearInterval(iv)},500)}
+$("voiceSel").onchange=()=>{badVoices.clear();narrator=findVoice($("voiceSel").value)||narrator;lsSet("contes-voice",$("voiceSel").value);updateVoiceTip();sampleVoice()};
+$("maleSel").onchange=()=>{badVoices.clear();const id=$("maleSel").value;lsSet("contes-male",id);maleVoice=id==="none"?null:findVoice(id);
+  stopAll();unlockSpeech();const t=++token;say("Ça sent la chair fraîche !",{k:"__male"},t)};
+$("rate").value=lsGet("contes-rate",0.9);
+$("rate").oninput=()=>lsSet("contes-rate",+$("rate").value);
+$("fxOn").checked=lsGet("contes-fx",true); $("fxOn").onchange=()=>lsSet("contes-fx",$("fxOn").checked);
+$("charOn").checked=lsGet("contes-char",true); $("charOn").onchange=()=>lsSet("contes-char",$("charOn").checked);
+$("setBtn").onclick=()=>$("settings").classList.toggle("hidden");
+$("testVoice").onclick=()=>{unlockAudio();badVoices.clear();sampleVoice()};
+if($("tipOk"))$("tipOk").onclick=()=>{lsSet("contes-tipoff",true);updateVoiceTip()};
+function sampleVoice(){stopAll();unlockSpeech();const t=++token;say("Il était une fois… une petite maison, au bord d'une grande forêt.",{},t)}
+
+// Intonations : chaque style change légèrement le rythme, la hauteur et le volume
+const STYLE={doux:{r:.88,p:-.03,v:.85},chuchote:{r:.85,p:.05,v:.45},crie:{r:1.08,p:.12,v:1},peur:{r:1.1,p:.1,v:.95},triste:{r:.85,p:-.08,v:.85},colere:{r:1.02,p:-.1,v:1}};
+function voiceFor(k,style){
+  const st=STYLE[style]||{r:1,p:0,v:1};
+  let voice=narrator,pitch=1.02,rate=1;
+  if(k==="__male") return {voice:maleVoice||narrator,pitch:maleVoice?0.9:0.75,rate:.9,vol:1};
+  if(k&&k!=="N"&&$("charOn").checked){
+    const r=tale.roles.find(x=>x.k===k)||(tale.extras&&tale.extras[k])||{p:1,r:1,g:"f"};
+    const g=cast[k]?cast[k].g:r.g;
+    // hauteur adoucie : trop extrême, la voix devient robotique
+    pitch=1+(r.p-1)*0.5; rate=1+((r.r||1)-1)*0.7;
+    if(g==="m"){ if(maleVoice){voice=maleVoice;pitch=1+(pitch-1)*0.8} else pitch-=0.15 }
+  }
+  return {voice,pitch:Math.min(2,Math.max(.1,pitch+st.p)),rate:rate*st.r,vol:st.v};
+}
+// Découpe en phrases pour respecter les temps d'arrêt
+function sentences(text){
+  const t=text.replace(/[«»]/g,"").replace(/\s+/g," ").trim();
+  return (t.match(/[^.!?…]+(?:[.!?…]+|$)/g)||[t]).map(s=>s.trim()).filter(s=>/[\p{L}\d]/u.test(s));
+}
+function pauseAfter(s){if(/(…|\.\.\.)$/.test(s))return 700;if(/[!?]$/.test(s))return 380;if(/\.$/.test(s))return 330;return 200}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+// Voix qui ne fonctionnent pas dans cette application (détectées automatiquement)
+const badVoices=new Set();
+function freshVoice(v){if(!v)return null;try{return speechSynthesis.getVoices().find(x=>x.name===v.name&&x.lang===v.lang)||v}catch(e){return v}}
+function utter(text,v,myTok,retry){return new Promise(res=>{
+  if(!hasTTS||myTok!==token)return res();
+  const u=new SpeechSynthesisUtterance(text);
+  const voice=(v.voice&&!badVoices.has(v.voice.name))?freshVoice(v.voice):null;
+  u.lang=(voice&&voice.lang)||"fr-FR"; if(voice)u.voice=voice;
+  u.pitch=v.pitch; u.rate=Math.min(2,Math.max(.5,v.rate*(+$("rate").value))); u.volume=v.vol;
+  let done=false,started=false;const t0=Date.now();
+  const fin=failed=>{if(done)return;done=true;clearTimeout(to);
+    // la voix choisie n'a rien dit : on la met de côté et on relit avec la voix par défaut
+    if(failed&&voice&&!retry&&myTok===token){badVoices.add(voice.name);showVoiceStatus("⚠️ La voix « "+voice.name+" » ne fonctionne pas ici. J'utilise la voix française par défaut.");
+      return utter(text,v,myTok,true).then(res)}
+    res()};
+  u.onstart=()=>{started=true;if(voice)showVoiceStatus("✅ Voix utilisée : "+voice.name)};
+  u.onend=()=>fin(!started&&Date.now()-t0<250&&text.length>8);
+  u.onerror=e=>fin(!(e&&(e.error==="interrupted"||e.error==="canceled")));
+  const to=setTimeout(()=>fin(!started),Math.max(6000,text.length*130/u.rate+4000));
+  try{speechSynthesis.speak(u)}catch(e){fin(true)}
+})}
+function showVoiceStatus(m){const el=$("voiceStatus");if(el)el.textContent=m}
+// iPhone : la voix doit être « réveillée » directement au moment du toucher
+function unlockSpeech(){if(!hasTTS)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(" ");u.volume=0;speechSynthesis.speak(u);if(speechSynthesis.paused)speechSynthesis.resume()}catch(e){}}
+async function say(text,o={},myTok){
+  if(elOn()){try{return await elSay(text,o,myTok)}catch(e){setElState("⚠️ ElevenLabs : "+(e.message||e)+" — autre voix utilisée pour cette phrase.")}}
+  if(piperOn()){try{return await piperSay(text,o,myTok)}catch(e){setPiperState("⚠️ Voix IA : "+(e.message||e)+" — voix du téléphone utilisée pour cette phrase.")}}
+  return phoneSay(text,o,myTok);
+}
+async function phoneSay(text,{k,style}={},myTok){
+  if(!hasTTS||myTok!==token)return;
+  const v=voiceFor(k,style); duck(true);
+  const parts=sentences(text);
+  for(let i=0;i<parts.length;i++){
+    if(myTok!==token)break;
+    const suspens=/…$/.test(parts[i]);
+    await utter(parts[i].replace(/…/g,"..."),suspens?{...v,rate:v.rate*.92}:v,myTok);
+    if(i<parts.length-1) await wait(pauseAfter(parts[i]));
+  }
+  duck(false);
+}
+
+// ---------- bruitages (synthétisés) ----------
+let AC=null, master=null, noiseBuf=null;
+function unlockAudio(){
+  try{
+    if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();
+      const comp=AC.createDynamicsCompressor();master=AC.createGain();master.gain.value=0.9;master.connect(comp);comp.connect(AC.destination);
+      noiseBuf=AC.createBuffer(1,AC.sampleRate*2,AC.sampleRate);const d=noiseBuf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;}
+    if(AC.state==="suspended")AC.resume();
+  }catch(e){}
+}
+function G(v=0){const g=AC.createGain();g.gain.value=v;return g}
+function O(type,f){const o=AC.createOscillator();o.type=type;o.frequency.value=f;return o}
+function N(){const s=AC.createBufferSource();s.buffer=noiseBuf;s.loop=true;return s}
+function F(type,f,q=1){const b=AC.createBiquadFilter();b.type=type;b.frequency.value=f;b.Q.value=q;return b}
+function env(g,t,a,peak,hold,rel){g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(peak,t+a);g.gain.setValueAtTime(peak,t+a+hold);g.gain.exponentialRampToValueAtTime(0.0001,t+a+hold+rel)}
+function chain(...n){for(let i=0;i<n.length-1;i++)n[i].connect(n[i+1]);return n[n.length-1]}
+function run(src,t,dur){src.start(t);src.stop(t+dur+0.05)}
+
+const FX={
+  loup(t){const o=O("triangle",280),g=G(),lf=O("sine",5.5),lg=G(9);lf.connect(lg);lg.connect(o.frequency);
+    o.frequency.setValueAtTime(260,t);o.frequency.linearRampToValueAtTime(520,t+.5);o.frequency.linearRampToValueAtTime(570,t+1.6);o.frequency.linearRampToValueAtTime(360,t+2.3);
+    chain(o,F("lowpass",1400),g,master);env(g,t,.35,.4,1.5,.6);run(o,t,2.5);run(lf,t,2.5);return 2.5},
+  cochon(t){for(let i=0;i<2;i++){const s=t+i*.32,o=O("sawtooth",140),g=G(),n=N(),ng=G();
+    o.frequency.setValueAtTime(130,s);o.frequency.linearRampToValueAtTime(230,s+.08);o.frequency.linearRampToValueAtTime(150,s+.2);
+    const bp=F("bandpass",900,3);o.connect(bp);n.connect(ng);ng.gain.value=.15;ng.connect(bp);chain(bp,g,master);env(g,s,.01,.6,.08,.14);run(o,s,.25);run(n,s,.25)}return .75},
+  ours(t){const o1=O("sawtooth",62),o2=O("sawtooth",66),g=G(),am=G(.5),lf=O("sine",9),lg=G(.5);lf.connect(lg);lg.connect(am.gain);
+    const lp=F("lowpass",420,2);o1.connect(lp);o2.connect(lp);chain(lp,am,g,master);env(g,t,.15,.7,.8,.35);[o1,o2,lf].forEach(o=>run(o,t,1.3));return 1.3},
+  lion(t){const o=O("sawtooth",95),o2=O("sawtooth",100),n=N(),ng=G(.25),g=G(),lp=F("lowpass",500,1),am=G(.6),lf=O("sine",14),lg=G(.4);
+    lf.connect(lg);lg.connect(am.gain);o.frequency.linearRampToValueAtTime(60,t+1.6);o2.frequency.linearRampToValueAtTime(63,t+1.6);
+    lp.frequency.setValueAtTime(300,t);lp.frequency.linearRampToValueAtTime(1300,t+.4);lp.frequency.linearRampToValueAtTime(350,t+1.6);
+    o.connect(lp);o2.connect(lp);n.connect(ng);ng.connect(lp);chain(lp,am,g,master);env(g,t,.2,.9,.9,.5);[o,o2,n,lf].forEach(x=>run(x,t,1.7));return 1.7},
+  canard(t){for(let i=0;i<2;i++){const s=t+i*.3,o=O("sawtooth",430),g=G();o.frequency.setValueAtTime(440,s);o.frequency.linearRampToValueAtTime(320,s+.18);
+    chain(o,F("bandpass",1100,4),g,master);env(g,s,.01,.8,.1,.1);run(o,s,.22)}return .65},
+  chat(t){const o=O("sawtooth",400),g=G(),bp=F("bandpass",800,6);o.frequency.setValueAtTime(380,t);o.frequency.linearRampToValueAtTime(640,t+.28);o.frequency.linearRampToValueAtTime(430,t+.85);
+    bp.frequency.setValueAtTime(700,t);bp.frequency.linearRampToValueAtTime(1900,t+.3);bp.frequency.linearRampToValueAtTime(800,t+.85);chain(o,bp,g,master);env(g,t,.08,.9,.5,.3);run(o,t,.95);return .95},
+  poule(t){for(let i=0;i<4;i++){const s=t+i*.13,o=O("square",720),g=G();o.frequency.setValueAtTime(760,s);o.frequency.linearRampToValueAtTime(520,s+.06);chain(o,F("bandpass",1200,3),g,master);env(g,s,.005,.35,.03,.05);run(o,s,.1)}
+    const s=t+.6,o=O("square",900),g=G();o.frequency.setValueAtTime(950,s);o.frequency.linearRampToValueAtTime(620,s+.3);chain(o,F("bandpass",1300,3),g,master);env(g,s,.02,.4,.15,.15);run(o,s,.35);return 1},
+  toc(t){for(let i=0;i<2;i++){const s=t+i*.26,n=N(),g=G(),o=O("sine",130),og=G();chain(n,F("lowpass",600),g,master);env(g,s,.003,.9,.01,.09);chain(o,og,master);env(og,s,.003,.7,.01,.12);run(n,s,.15);run(o,s,.15)}return .65},
+  porte(t){const o=O("sawtooth",95),lf=O("square",21),lg=G(35),g=G();lf.connect(lg);lg.connect(o.frequency);o.frequency.linearRampToValueAtTime(140,t+.9);
+    chain(o,F("bandpass",1400,2),g,master);env(g,t,.1,.25,.65,.2);run(o,t,1);run(lf,t,1);return 1.05},
+  cloche(t){for(let i=0;i<3;i++){const s=t+i*.85;[1,2.76,5.4].forEach((m,j)=>{const o=O("sine",196*m),g=G();chain(o,g,master);env(g,s,.005,[.5,.2,.08][j],0,1.8-j*.4);run(o,s,2)})}return 3.2},
+  souffle(t){const n=N(),bp=F("bandpass",400,1),g=G();bp.frequency.setValueAtTime(300,t);bp.frequency.linearRampToValueAtTime(1600,t+.6);bp.frequency.linearRampToValueAtTime(400,t+1.5);
+    chain(n,bp,g,master);env(g,t,.3,.8,.6,.6);run(n,t,1.6);return 1.6},
+  magie(t){const notes=[1047,1175,1319,1568,1760,2093,2349,2637];notes.forEach((f,i)=>{const s=t+i*.08,o=O("sine",f),g=G();chain(o,g,master);env(g,s,.005,.18,0,.35);run(o,s,.4)});return 1.1},
+  crac(t){for(let i=0;i<3;i++){const s=t+i*.035+Math.random()*.02,n=N(),g=G();chain(n,F("highpass",1200),g,master);env(g,s,.002,.9,.005,.06);run(n,s,.1)}return .4},
+  pas(t){for(let i=0;i<3;i++){const s=t+i*.5,o=O("sine",60),g=G(),n=N(),ng=G();o.frequency.setValueAtTime(70,s);o.frequency.exponentialRampToValueAtTime(30,s+.35);
+    chain(o,g,master);env(g,s,.005,1,.02,.4);chain(n,F("lowpass",160),ng,master);env(ng,s,.005,.8,.01,.2);run(o,s,.45);run(n,s,.3)}return 1.5},
+  oiseaux(t){for(let i=0;i<7;i++){const s=t+i*.15+Math.random()*.05,o=O("sine",2600),g=G();o.frequency.setValueAtTime(2400+Math.random()*600,s);o.frequency.exponentialRampToValueAtTime(3800+Math.random()*600,s+.07);
+    chain(o,g,master);env(g,s,.005,.18,.02,.05);run(o,s,.1)}return 1.2},
+  rire(t){for(let i=0;i<8;i++){const s=t+i*.14,f=1000-i*40,o=O("square",f),g=G();o.frequency.setValueAtTime(f,s);o.frequency.linearRampToValueAtTime(f*.75,s+.08);
+    chain(o,F("bandpass",1600,4),g,master);env(g,s,.005,.35,.04,.05);run(o,s,.12)}return 1.25},
+  sabots(t){for(let i=0;i<6;i++){const s=t+i*.19,n=N(),g=G();chain(n,F("bandpass",i%2?1300:2100,5),g,master);env(g,s,.002,1,.005,.05);run(n,s,.08)}return 1.2},
+  souris(t){for(let i=0;i<3;i++){const s=t+i*.17,o=O("sine",3000),g=G();o.frequency.setValueAtTime(3000,s);o.frequency.linearRampToValueAtTime(3900,s+.08);chain(o,g,master);env(g,s,.005,.2,.04,.04);run(o,s,.1)}return .6},
+  vache(t){const o=O("sawtooth",115),g=G(),bp=F("bandpass",600,3),lf=O("sine",5),lg=G(3);lf.connect(lg);lg.connect(o.frequency);
+    o.frequency.setValueAtTime(110,t);o.frequency.linearRampToValueAtTime(118,t+.4);o.frequency.linearRampToValueAtTime(85,t+1.5);bp.frequency.setValueAtTime(450,t);bp.frequency.linearRampToValueAtTime(750,t+.5);bp.frequency.linearRampToValueAtTime(380,t+1.5);
+    chain(o,bp,g,master);env(g,t,.25,.9,.85,.4);run(o,t,1.6);run(lf,t,1.6);return 1.6},
+  ronfle(t){for(let i=0;i<2;i++){const s=t+i*1.1,n=N(),o=O("sawtooth",48),g=G(),lp=F("lowpass",350,3);n.connect(lp);const og=G(.5);o.connect(og);og.connect(lp);chain(lp,g,master);
+    g.gain.setValueAtTime(.0001,s);g.gain.linearRampToValueAtTime(.8,s+.5);g.gain.exponentialRampToValueAtTime(.0001,s+.95);run(n,s,1);run(o,s,1)}return 2.2},
+  hibou(t){owl(t,master);owl(t+1.3,master);return 2.2},
+  chien(t){for(let i=0;i<2;i++){const s=t+i*.32,o=O("sawtooth",320),g=G(),n=N(),ng=G(.3),bp=F("bandpass",900,2);o.frequency.setValueAtTime(330,s);o.frequency.exponentialRampToValueAtTime(190,s+.14);
+    o.connect(bp);n.connect(ng);ng.connect(bp);chain(bp,g,master);env(g,s,.005,.8,.04,.1);run(o,s,.18);run(n,s,.18)}return .75},
+  cygne(t){for(let i=0;i<2;i++){const s=t+i*.4,o=O("square",520),g=G();o.frequency.setValueAtTime(540,s);o.frequency.linearRampToValueAtTime(470,s+.28);
+    chain(o,F("bandpass",1000,4),g,master);env(g,s,.03,.35,.15,.12);run(o,s,.32)}return .9},
+  harpe(t){const k=[62,66,69,74,78,81,86,90];k.forEach((n,i)=>bell(midi(n),t+i*.09,.13,master));return 1.4}
+};
+function playFx(name,force){
+  return new Promise(res=>{
+    if((!force&&!$("fxOn").checked)||!FX[name]) return res();
+    unlockAudio(); popEmoji(SND_EMO[name]);
+    if(/crac|pas|lion|toc|ours/.test(name)&&animOn()){const b=document.querySelector(".book");b.classList.remove("shake");void b.offsetWidth;b.classList.add("shake")}
+    if(name==="magie") burst(innerWidth/2,innerHeight*.4,40);
+    if(!AC) return res();
+    let d=1; try{d=FX[name](AC.currentTime+0.03)}catch(e){}
+    setTimeout(res,d*1000+150);
+  });
+}
+
+// ---------- lecture enchaînée ----------
+let token=0, mode=null; // mode: "page" | "story"
+function setButtons(){
+  $("speak").textContent=mode==="page"?"⏹ Arrêter":"🔊 Écouter la page";
+  $("storyBtn").textContent=mode==="story"?"⏹ Arrêter l'histoire":"🌙 Raconte-moi toute l'histoire";
+}
+function stopAll(){token++;mode=null;try{myStop()}catch(e){}try{elStop()}catch(e){}try{hasTTS&&speechSynthesis.cancel()}catch(e){}
+  document.querySelectorAll(".now").forEach(e=>e.classList.remove("now"));setButtons()}
+async function readPage(myTok){
+  try{piperWarm(pageIdx)}catch(e){}
+  try{prefetch(pageIdx);if(mode==="story")prefetch(pageIdx+1)}catch(e){}
+  const segs=segments(tale.pages[pageIdx]);
+  for(let i=0;i<segs.length;i++){
+    if(myTok!==token) return false;
+    const s=segs[i], el=$("page").querySelector(`[data-i="${i}"]`);
+    document.querySelectorAll(".now").forEach(e=>e.classList.remove("now")); if(el)el.classList.add("now");
+    document.querySelectorAll(".ch.talk").forEach(e=>e.classList.remove("talk"));
+    if(s.type==="pause"){await wait(1000);continue}
+    if(s.type==="fx"){await playFx(s.name);await wait(150)}
+    else{
+      const ch=s.type==="s"?$("scene").querySelector(`.ch[data-k="${s.k}"]`):null; if(ch)ch.classList.add("talk");
+      if(!(await myVoicePlay(s,myTok))) await say(plain(s.raw),{k:s.type==="s"?s.k:null,style:s.style},myTok);
+      if(ch)ch.classList.remove("talk");
+      await wait(s.type==="s"?350:280);
+    }
+  }
+  if(myTok!==token) return false;
+  document.querySelectorAll(".now").forEach(e=>e.classList.remove("now"));
+  return true;
+}
+$("speak").onclick=async()=>{
+  if(mode){stopAll();return}
+  unlockAudio(); unlockSpeech(); const t=++token; mode="page"; setButtons();
+  await readPage(t); if(t===token){mode=null;setButtons()}
+};
+$("storyBtn").onclick=async()=>{
+  if(mode){stopAll();return}
+  unlockAudio(); unlockSpeech(); const t=++token; mode="story"; setButtons();
+  if(pageIdx===tale.pages.length-1){pageIdx=0;renderBook()}
+  while(t===token){
+    const ok=await readPage(t); if(!ok||t!==token) return;
+    if(pageIdx>=tale.pages.length-1) break;
+    await new Promise(r=>setTimeout(r,1400)); if(t!==token) return;
+    pageIdx++; renderBook(true);
+  }
+  if(t===token){mode=null;setButtons();celebrate()}
+};
+
+// ================= MAGIE : musique, ambiances, animations =================
+const MOOD={
+  chaperon:{key:62,minor:false,bpm:80,amb:"foret"},
+  cochons:{key:60,minor:false,bpm:96,amb:"foret"},
+  boucle:{key:65,minor:false,bpm:84,amb:"foret"},
+  hansel:{key:57,minor:true,bpm:70,amb:"foret",brightFrom:7},
+  cendrillon:{key:67,minor:false,bpm:72,amb:null},
+  chatbotte:{key:62,minor:false,bpm:100,amb:null},
+  haricot:{key:60,minor:false,bpm:88,amb:null},
+  canard:{key:64,minor:true,bpm:66,amb:"eau",brightFrom:5}
+};
+const animOn=()=>$("animOn").checked;
+
+// --- scène illustrée ---
+const SCENES=[
+  {re:/hiver|souffl|grelott/,amb:"vent",deco:["❄️","💨"]},
+  {re:/chemin[ée]e|cendres|four|marmite/,amb:"feu",deco:["🔥","🕯️"]},
+  {re:/rivi[èe]re|[ée]tang|\blac\b|baign/,amb:"eau",deco:["🌊","🪷"]},
+  {re:/nuit|soir|minuit|endorm|sieste|ronfl/,amb:"nuit",deco:["🌙","⭐"]},
+  {re:/for[êe]t|bois|arbre|sentier|fleurs|roseaux|printemps|march[èe]rent/,amb:"foret",deco:["🌲","🌳"]}
+];
+const EXTRA=[[/ch[âa]teau|\bbal\b|royaume/,"🏰"],[/nuages/,"☁️"],[/soleil|printemps/,"☀️"],[/galette|g[âa]teau|soupe|pain d'[ée]pice|chocolat/,"🍰"],
+  [/maison/,"🏡"],[/\bor\b|perles/,"💰"],[/carrosse|citrouille/,"🎃"],[/haricot|tige/,"🌱"],[/œuf/,"🥚"],[/pantoufle/,"👠"],[/fleurs/,"🌷"],[/paille/,"🌾"],[/briques/,"🧱"],[/cage/,"⛓️"]];
+function sceneFor(){
+  const txt=plain(tale.pages[pageIdx]).toLowerCase();
+  const sc=SCENES.find(s=>s.re.test(txt));
+  const deco=sc?[...sc.deco]:[];
+  EXTRA.forEach(([re,e])=>{if(re.test(txt)&&deco.length<4&&!deco.includes(e))deco.push(e)});
+  if(!deco.length)deco.push("✨","🌟");
+  return {amb:sc?sc.amb:MOOD[tale.id].amb, cls:sc?sc.amb:(MOOD[tale.id].amb||""), deco};
+}
+function renderScene(){
+  const sc=sceneFor(), p=tale.pages[pageIdx];
+  const present=tale.roles.filter(r=>p.includes("{"+r.k+"}")||p.includes("[["+r.k+":")||p.includes("[["+r.k+"/")||p.includes("{"+r.k+"|"));
+  const L=sc.deco.filter((_,i)=>i%2===0), R=sc.deco.filter((_,i)=>i%2===1);
+  $("scene").className="scene "+sc.cls;
+  $("scene").innerHTML=`<div class="deco">${L.map(e=>`<span>${e}</span>`).join("")}</div>
+    <div class="chars">${present.map(r=>`<span class="ch" data-k="${r.k}">${r.ico}<small>${esc(nameOf(r.k))}</small></span>`).join("")}</div>
+    <div class="deco">${R.map(e=>`<span>${e}</span>`).join("")}</div>`;
+  $("scene").querySelectorAll(".ch").forEach(c=>c.onclick=async()=>{
+    if(mode)return; unlockAudio(); const t=++token; c.classList.add("talk");
+    await say(`C'est moi, ${nameOf(c.dataset.k)} !`,{k:c.dataset.k},t); c.classList.remove("talk");
+  });
+  setAmbience(sc.amb);
+}
+
+// --- musique boîte à musique (générée) ---
+let mus={on:false,timer:null,next:0,step:0,bar:0,gain:null}, ducked=false;
+const midi=n=>440*Math.pow(2,(n-69)/12);
+const PAT=[0,1,2,1,3,2,1,2];
+function chordFor(bar,minor){const P=minor?[[0,3,7],[8,12,15],[3,7,10],[10,14,17]]:[[0,4,7],[7,11,14],[9,12,16],[5,9,12]];return P[bar%4]}
+function bell(f,t,v,out){[1,2,3].forEach((m,i)=>{const o=O("sine",f*m),g=G();chain(o,g,out);env(g,t,.004,v*[1,.25,.08][i],0,[1.4,.6,.3][i]);run(o,t,1.5)})}
+function bassN(f,t,v,d,out){const o=O("triangle",f),g=G();chain(o,F("lowpass",500),g,out);env(g,t,.02,v,d*.5,d*.6);run(o,t,d*1.2)}
+function musLevel(){return 0.5*(+$("musVol").value)*(ducked?0.4:1)}
+function tick(){
+  if(!mus.on||!AC||!tale)return;
+  const m=MOOD[tale.id], spb=60/m.bpm/2;
+  while(mus.next<AC.currentTime+0.3){
+    const minor=m.minor&&!(m.brightFrom!=null&&pageIdx>=m.brightFrom);
+    const ch=chordFor(mus.bar,minor), idx=PAT[mus.step];
+    const n=idx===3?m.key+ch[0]+12:m.key+ch[idx];
+    bell(midi(n),mus.next,mus.step%2?0.11:0.17,mus.gain);
+    if(mus.bar%2===1&&mus.step===6) bell(midi(m.key+ch[1]+24),mus.next,0.06,mus.gain);
+    if(mus.step===0) bassN(midi(m.key+ch[0]-24),mus.next,.22,spb*8,mus.gain);
+    if(mus.step===4) bassN(midi(m.key+ch[2]-24),mus.next,.1,spb*4,mus.gain);
+    mus.next+=spb; if(++mus.step>=8){mus.step=0;mus.bar++}
+  }
+}
+function startMusic(){
+  if(!AC||!$("musOn").checked||mus.on)return;
+  mus.gain=G(0);mus.gain.connect(master);mus.on=true;mus.next=AC.currentTime+.6;mus.step=0;mus.bar=0;
+  mus.gain.gain.setTargetAtTime(musLevel(),AC.currentTime,1);mus.timer=setInterval(tick,60);
+}
+function stopMusic(){
+  if(!mus.on)return; mus.on=false; clearInterval(mus.timer); const g=mus.gain;
+  try{g.gain.cancelScheduledValues(AC.currentTime);g.gain.setTargetAtTime(0,AC.currentTime,.3);setTimeout(()=>g.disconnect(),2000)}catch(e){}
+}
+function duck(d){ducked=d;if(!AC)return;
+  try{if(mus.on)mus.gain.gain.setTargetAtTime(musLevel(),AC.currentTime,.25);if(amb.gain)amb.gain.gain.setTargetAtTime(ambLevel(),AC.currentTime,.3)}catch(e){}}
+$("musOn").checked=lsGet("contes-mus",true);
+$("musOn").onchange=()=>{lsSet("contes-mus",$("musOn").checked);unlockAudio();$("musOn").checked?startMusic():stopMusic()};
+$("musVol").value=lsGet("contes-musvol",0.5);
+$("musVol").oninput=()=>{lsSet("contes-musvol",+$("musVol").value);duck(ducked)};
+
+// --- ambiances ---
+let amb={name:null,gain:null,nodes:[],timers:[]};
+function ambLevel(){return ducked?0.3:0.6}
+function setAmbience(name){
+  if(!AC)return; if(!$("ambOn").checked)name=null; if(name===amb.name)return;
+  stopAmb(); if(!name)return;
+  const g=G(0); g.connect(master); amb={name,gain:g,nodes:[],timers:[]};
+  g.gain.setTargetAtTime(ambLevel(),AC.currentTime,.8);
+  const loopNoise=(type,f,q,v,lfo)=>{const n=N(),ng=G(v);chain(n,F(type,f,q),ng,g);n.start();amb.nodes.push(n);
+    if(lfo){const l=O("sine",lfo),lg=G(v*.7);l.connect(lg);lg.connect(ng.gain);l.start();amb.nodes.push(l)}};
+  const every=(min,max,fn)=>{const loop=()=>{amb.timers.push(setTimeout(()=>{if(amb.gain!==g)return;try{fn(AC.currentTime+.02)}catch(e){}loop()},min+Math.random()*(max-min)))};loop()};
+  if(name==="foret"){loopNoise("lowpass",500,.5,.05,.1);every(1500,4000,t=>chirp(t,g))}
+  if(name==="nuit"){every(700,1400,t=>cricket(t,g));every(5000,11000,t=>owl(t,g))}
+  if(name==="feu"){loopNoise("lowpass",220,.7,.12,.3);every(60,350,t=>crackle(t,g))}
+  if(name==="eau"){loopNoise("bandpass",900,.6,.08,.25);loopNoise("bandpass",2200,1,.03,.4);every(2500,6000,t=>chirp(t,g))}
+  if(name==="vent"){const n=N(),bp=F("bandpass",500,1.5),ng=G(.14);chain(n,bp,ng,g);n.start();amb.nodes.push(n);
+    const l=O("sine",.13),lg=G(300);l.connect(lg);lg.connect(bp.frequency);l.start();amb.nodes.push(l)}
+}
+function stopAmb(){
+  const {gain:g,nodes,timers}=amb; timers.forEach(clearTimeout); amb={name:null,gain:null,nodes:[],timers:[]};
+  if(!g||!AC)return; try{g.gain.setTargetAtTime(0,AC.currentTime,.4)}catch(e){}
+  setTimeout(()=>{nodes.forEach(n=>{try{n.stop()}catch(e){}});try{g.disconnect()}catch(e){}},2000);
+}
+function chirp(t,out){const k=2+Math.floor(Math.random()*3),b=2200+Math.random()*1500;for(let i=0;i<k;i++){const s=t+i*.11,o=O("sine",b),g=G();
+  o.frequency.setValueAtTime(b,s);o.frequency.exponentialRampToValueAtTime(b*1.4,s+.06);chain(o,g,out);env(g,s,.005,.08,.02,.05);run(o,s,.1)}}
+function cricket(t,out){for(let i=0;i<3;i++){const s=t+i*.06,o=O("sine",4400),g=G();chain(o,g,out);env(g,s,.005,.03,.025,.02);run(o,s,.06)}}
+function owl(t,out){[0,.5].forEach((d,i)=>{const s=t+d,o=O("sine",400),g=G();o.frequency.setValueAtTime(410,s);o.frequency.linearRampToValueAtTime(370,s+.35);
+  chain(o,F("lowpass",900),g,out);env(g,s,.05,.15,i?.25:.1,.15);run(o,s,.6)})}
+function crackle(t,out){const n=N(),g=G();chain(n,F("highpass",1500+Math.random()*2000),g,out);env(g,t,.001,.12+Math.random()*.2,.002,.02);run(n,t,.04)}
+$("ambOn").checked=lsGet("contes-amb",true);
+$("ambOn").onchange=()=>{lsSet("contes-amb",$("ambOn").checked);unlockAudio();setAmbience($("ambOn").checked?sceneFor().amb:null)};
+
+// --- petits sons magiques ---
+function flip(){if(!AC)return;try{const t=AC.currentTime+.01,n=N(),bp=F("bandpass",1200,1),g=G();bp.frequency.setValueAtTime(600,t);bp.frequency.exponentialRampToValueAtTime(3500,t+.25);
+  chain(n,bp,g,master);env(g,t,.03,.18,.08,.15);run(n,t,.35)}catch(e){}}
+function intro(){if(!AC)return;try{const t=AC.currentTime+.1,m=MOOD[tale.id],sc=[0,2,4,7,9,12,14,16,19,21,24];
+  sc.forEach((s,i)=>bell(midi(m.key+s),t+i*.07,.14,master));burst(innerWidth/2,innerHeight/3,50)}catch(e){}}
+function celebrate(){
+  burst(innerWidth/2,innerHeight*.35,90);
+  if(!AC)return;try{const t=AC.currentTime+.05,k=MOOD[tale.id].key;
+    [[0,0],[4,.15],[7,.3],[12,.45]].forEach(([n,d])=>{const o=O("sawtooth",midi(k+n)),g=G();chain(o,F("lowpass",1800),g,master);env(g,t+d,.02,.18,.08,.15);run(o,t+d,.3)});
+    [0,4,7,12].forEach(n=>{const o=O("sawtooth",midi(k+n)),g=G();chain(o,F("lowpass",1600),g,master);env(g,t+.65,.03,.12,.6,.8);run(o,t+.65,1.6)});
+    [24,28,31,36].forEach((n,i)=>bell(midi(k+n),t+.7+i*.1,.1,master))}catch(e){}
+}
+function popEmoji(e){if(!e||!animOn())return;const s=document.createElement("div");s.className="pop";s.textContent=e;s.style.left=(25+Math.random()*50)+"%";
+  document.body.appendChild(s);setTimeout(()=>s.remove(),1700)}
+
+// --- ciel étoilé (canvas) ---
+const cv=$("sky"),cx=cv.getContext("2d");let W=0,H=0,stars=[],parts=[];
+function resize(){const r=devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*r;cv.height=H*r;cx.setTransform(r,0,0,r,0,0)}
+resize();addEventListener("resize",resize);
+for(let i=0;i<28;i++)stars.push({x:Math.random(),y:Math.random(),s:2+Math.random()*3,v:.00008+Math.random()*.00015,p:Math.random()*6});
+const COLS=["#f2b53c","#e2674a","#4a8fe2","#7ac77a","#c47ae2","#ffd86b"];
+function burst(x,y,n){if(!animOn())return;for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,sp=2+Math.random()*6;
+  parts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-2,s:3+Math.random()*5,c:COLS[i%COLS.length],life:1,rot:Math.random()*6})}}
+function starPath(x,y,r,rot){cx.beginPath();for(let i=0;i<8;i++){const rr=i%2?r*.4:r,a=rot+i*Math.PI/4;cx.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr)}cx.closePath()}
+function frame(ts){
+  cx.clearRect(0,0,W,H);
+  if(animOn()&&!$("read").classList.contains("hidden")){
+    stars.forEach(s=>{s.y-=s.v*16;if(s.y<-.05){s.y=1.05;s.x=Math.random()}
+      const a=.35+.35*Math.sin(ts/600+s.p);cx.globalAlpha=a;cx.fillStyle="#f2b53c";starPath(s.x*W,s.y*H,s.s,ts/3000+s.p);cx.fill()});
+  }
+  parts=parts.filter(p=>p.life>0);
+  parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.15;p.vx*=.98;p.life-=.015;p.rot+=.1;cx.globalAlpha=Math.max(0,p.life);cx.fillStyle=p.c;starPath(p.x,p.y,p.s,p.rot);cx.fill()});
+  cx.globalAlpha=1; requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+$("animOn").checked=lsGet("contes-anim",true);
+const applyAnim=()=>document.body.classList.toggle("no-anim",!animOn());applyAnim();
+$("animOn").onchange=()=>{lsSet("contes-anim",animOn());applyAnim()};
+
+
+// ================= VOIX ELEVENLABS =================
+const EL={key:lsGet("el-key",""),on:false,model:lsGet("el-model","eleven_v3"),voices:[],cats:lsGet("el-cats",{})};
+const CATS=[["conteuse","📖 Conteuse (narration)"],["femme","👩 Femmes"],["homme","👨 Hommes"],["enfant","🧒 Enfants et petits animaux"],["grave","🐺 Grosses voix (loup, ogre, géant, ours)"],["vieux","👵 Personnes âgées, sorcière"]];
+const ROLE_VT={cendrillon:{B:"femme"},hansel:{C:"vieux"},chaperon:{B:"vieux"},chatbotte:{C:"homme"},haricot:{X:"vieux",D:"enfant"}};
+const TAGS={doux:"[softly]",chuchote:"[whispers]",crie:"[shouting]",peur:"[scared]",triste:"[sad]",colere:"[angry]"};
+const elOn=()=>EL.on&&!!EL.key;
+function setElState(m){$("elState").textContent=m}
+async function elApi(path,opt={}){
+  const r=await fetch("https://api.elevenlabs.io"+path,{...opt,headers:{"xi-api-key":EL.key,...(opt.headers||{})}});
+  if(!r.ok){let msg="erreur "+r.status;try{const j=await r.json();const d=j.detail;msg=(d&&(d.message||d.status))||JSON.stringify(d||j)}catch(e){}
+    if(r.status===401)msg="clé API refusée ("+msg+")";throw new Error(msg)}
+  return r;
+}
+function vtxt(v){return (v.name+" "+JSON.stringify(v.labels||{})+" "+(v.description||"")).toLowerCase()}
+function vscore(v,cat){const t=vtxt(v),L=v.labels||{};let s=0;
+  if(/fr|french|fran[cç]ais/.test((L.language||"")+" "+(L.accent||"")+" "+(v.fine_tuning&&v.fine_tuning.language||"")))s+=6;
+  if(/french|fran[cç]ais|parisian/.test(t))s+=4;
+  const fem=L.gender==="female"||/\bfemale\b|woman/.test(t), mal=L.gender==="male"||/\bmale\b|\bman\b/.test(t);
+  const young=/young|child|kid|teen/.test(L.age||t), old=/old|elder|senior|grand/.test(L.age||"")||/old|elderly|grandma|grandpa|witch/.test(t);
+  if(cat==="conteuse"){if(fem)s+=5;if(/narrat|story|audiobook|calm|warm|soothing|soft/.test(t))s+=4;if(old)s-=2}
+  if(cat==="femme"){if(fem)s+=5;if(mal)s-=6;if(old)s-=2}
+  if(cat==="homme"){if(mal)s+=5;if(fem)s-=6;if(old)s-=2}
+  if(cat==="enfant"){if(young)s+=6;if(/child|kid|cartoon|playful|animat|cute|high/.test(t))s+=3;if(old)s-=5}
+  if(cat==="grave"){if(mal)s+=3;if(/deep|gravel|raspy|growl|rough|monster|villain|dark|bass|husky/.test(t))s+=6;if(young)s-=4;if(fem)s-=5}
+  if(cat==="vieux"){if(old)s+=6;if(/raspy|crackly|witch|wise|grandm|grandp/.test(t))s+=3;if(young)s-=5}
+  return s}
+function autoCats(){const used=new Set();const out={};
+  for(const [c] of CATS){const ranked=[...EL.voices].sort((a,b)=>vscore(b,c)-vscore(a,c));
+    const pick=(EL.cats[c]&&EL.voices.find(v=>v.voice_id===EL.cats[c]))||ranked.find(v=>!used.has(v.voice_id))||ranked[0];
+    if(pick){out[c]=pick.voice_id;used.add(pick.voice_id)}}
+  EL.cats=out;lsSet("el-cats",out)}
+function renderCats(){
+  $("elCats").innerHTML=CATS.map(([c,lab])=>`<label for="elc-${c}">${lab}</label>
+    <div class="row" style="margin-top:0"><select id="elc-${c}" data-c="${c}" style="flex:1">${EL.voices.map(v=>{const L=v.labels||{};
+      const info=[L.gender==="female"?"femme":L.gender==="male"?"homme":"",L.age,L.accent||L.language].filter(Boolean).join(", ");
+      return `<option value="${v.voice_id}" ${EL.cats[c]===v.voice_id?"selected":""}>${esc(v.name)}${info?" — "+esc(info):""}</option>`}).join("")}</select>
+    <button class="small" data-t="${c}">🔈</button></div>`).join("");
+  $("elCats").querySelectorAll("select").forEach(s=>s.onchange=()=>{EL.cats[s.dataset.c]=s.value;lsSet("el-cats",EL.cats)});
+  $("elCats").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>elTest(b.dataset.t));
+}
+async function elConnect(){
+  EL.key=$("elKey").value.trim();if(!EL.key){setElState("Colle d'abord ta clé API.");return}
+  lsSet("el-key",EL.key);setElState("Connexion…");
+  try{
+    const r=await elApi("/v1/voices");const j=await r.json();
+    EL.voices=(j.voices||[]).sort((a,b)=>a.name.localeCompare(b.name));
+    if(!EL.voices.length)throw new Error("aucune voix dans ton compte");
+    autoCats();renderCats();EL.on=true;lsSet("el-on",true);
+    $("elMore").classList.remove("hidden");
+    setElState(`✅ Connecté : ${EL.voices.length} voix disponibles. L'histoire sera lue avec ElevenLabs.`);
+    elCredits();updateCost();
+  }catch(e){EL.on=false;setElState("❌ "+(e.message||e)+(String(e).includes("Failed to fetch")?" — vérifie ta connexion, et que l'application est bien ouverte depuis son lien en ligne (pas dans Claude).":""))}
+}
+async function elCredits(){try{const j=await (await elApi("/v1/user/subscription")).json();
+  const left=(j.character_limit||0)-(j.character_count||0);
+  $("elCost").dataset.left=left;updateCost()}catch(e){}}
+function storyText(t){let n=0;t.pages.forEach(p=>segments(p).forEach(s=>{if(s.type==="n"||s.type==="s")n+=elPrep(plain(s.raw),s.style).length}));return n}
+function updateCost(){if(!tale||!$("elCost"))return;const n=storyText(tale),left=$("elCost").dataset.left;
+  $("elCost").textContent=`Cette histoire ≈ ${n.toLocaleString("fr-FR")} caractères (une seule fois, ensuite c'est gardé).`+(left?` Il te reste ≈ ${(+left).toLocaleString("fr-FR")} caractères ce mois-ci.`:"")}
+function roleCat(k){
+  if(!k||k==="N")return "conteuse";
+  const vt=ROLE_VT[tale.id]&&ROLE_VT[tale.id][k];if(vt)return vt;
+  const r=tale.roles.find(x=>x.k===k)||(tale.extras&&tale.extras[k])||{p:1,g:"f"};
+  const g=cast[k]?cast[k].g:r.g;
+  if(r.p<=0.45)return "grave";
+  if(r.p>=1.35)return "enfant";
+  return g==="m"?"homme":"femme";
+}
+function elPrep(text,style){let t=text.replace(/[«»]/g,"").replace(/\s+/g," ").trim();
+  if(EL.model==="eleven_v3"&&TAGS[style])t=TAGS[style]+" "+t;return t}
+// --- cache audio sur le téléphone ---
+let dbp=null;
+function idb(){if(!dbp)dbp=new Promise((res,rej)=>{const r=indexedDB.open("contes-audio",1);r.onupgradeneeded=()=>r.result.createObjectStore("a");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});return dbp}
+async function cacheGet(k){try{const db=await idb();return await new Promise(res=>{const q=db.transaction("a").objectStore("a").get(k);q.onsuccess=()=>res(q.result||null);q.onerror=()=>res(null)})}catch(e){return null}}
+async function cachePut(k,v){try{const db=await idb();db.transaction("a","readwrite").objectStore("a").put(v,k)}catch(e){}}
+const inflight={};let active=0;const queue=[];
+function limit(fn){return new Promise((res,rej)=>{const go=()=>{active++;fn().then(res,rej).finally(()=>{active--;if(queue.length)queue.shift()()})};active<2?go():queue.push(go)})}
+function getAudio(voiceId,text){
+  const key=EL.model+"|"+voiceId+"|"+text;
+  if(inflight[key])return inflight[key];
+  return inflight[key]=(async()=>{
+    const c=await cacheGet(key);if(c)return c;
+    const buf=await limit(async()=>{
+      const body={text,model_id:EL.model,voice_settings:EL.model==="eleven_v3"?{stability:0.5}:{stability:0.45,similarity_boost:0.8,style:0.35,use_speaker_boost:true}};
+      const r=await elApi(`/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`,{method:"POST",headers:{"Content-Type":"application/json","Accept":"audio/mpeg"},body:JSON.stringify(body)});
+      return await r.arrayBuffer()});
+    await cachePut(key,buf);return buf;
+  })().catch(e=>{delete inflight[key];throw e});
+}
+function segJobs(idx){const jobs=[];segments(tale.pages[idx]).forEach(s=>{if(s.type==="n"||s.type==="s"){const k=s.type==="s"?s.k:null;
+  jobs.push({voice:EL.cats[roleCat(k)],text:elPrep(plain(s.raw),s.style)})}});return jobs}
+function prefetch(idx){if(!elOn()||!tale||idx<0||idx>=tale.pages.length)return;segJobs(idx).forEach(j=>getAudio(j.voice,j.text).catch(()=>{}))}
+// --- lecture ---
+let curSrc=null;
+function decode(buf){return new Promise((res,rej)=>{try{const p=AC.decodeAudioData(buf.slice(0),res,rej);if(p&&p.then)p.then(res,rej)}catch(e){rej(e)}})}
+async function elSay(text,{k,style}={},myTok){
+  const voice=EL.cats[roleCat(k)];const t=elPrep(text,style);
+  const buf=await getAudio(voice,t);
+  if(myTok!==token)return;
+  unlockAudio();const ab=await decode(buf);if(myTok!==token)return;
+  duck(true);
+  await new Promise(res=>{const src=AC.createBufferSource();src.buffer=ab;src.connect(AC.destination);curSrc=src;
+    src.onended=()=>{if(curSrc===src)curSrc=null;res()};src.start()});
+  duck(false);
+}
+function elStop(){if(curSrc){try{curSrc.stop()}catch(e){}curSrc=null}}
+async function elTest(cat){stopAll();unlockAudio();const t=++token;
+  const lines={conteuse:"Il était une fois, au bord d'une grande forêt, une petite maison toute ronde…",femme:"Bonjour ! Comme il fait beau aujourd'hui !",homme:"Bonjour ! Je suis bien content de te voir.",
+    enfant:"Oh ! Regarde, un papillon ! On joue ensemble ?",grave:"Hum, hum… Ça sent la chair fraîche !",vieux:"Approche, mon enfant… approche."};
+  const voice=$("elc-"+cat).value;setElState("Génération de l'essai…");
+  try{const buf=await getAudio(voice,lines[cat]);const ab=await decode(buf);if(t!==token)return;
+    const src=AC.createBufferSource();src.buffer=ab;src.connect(AC.destination);curSrc=src;src.start();setElState("✅ Connecté.")}
+  catch(e){setElState("❌ "+(e.message||e))}}
+async function elPrepare(){
+  if(!elOn())return;const jobs=[];tale.pages.forEach((_,i)=>segJobs(i).forEach(j=>jobs.push(j)));
+  let done=0,err=null;$("elProg").textContent=`Préparation : 0 / ${jobs.length}`;
+  await Promise.all(jobs.map(j=>getAudio(j.voice,j.text).then(()=>{done++;$("elProg").textContent=`Préparation : ${done} / ${jobs.length}`}).catch(e=>{err=e})));
+  $("elProg").textContent=err?`⚠️ ${done} / ${jobs.length} prêts. Problème : ${err.message||err}`:`✅ « ${tale.title} » est prête : elle se lira sans attente, même sans internet.`;
+  elCredits();
+}
+$("elKey").value=EL.key;$("elModel").value=EL.model;
+$("elConnect").onclick=elConnect;
+$("elOff").onclick=()=>{EL.on=false;lsSet("el-on",false);elStop();setElState("Voix du téléphone utilisées. Touche « Connecter » pour revenir à ElevenLabs.")};
+$("elModel").onchange=()=>{EL.model=$("elModel").value;lsSet("el-model",EL.model);updateCost()};
+$("elPrep").onclick=()=>{unlockAudio();elPrepare()};
+$("elClear").onclick=async()=>{try{const db=await idb();db.transaction("a","readwrite").objectStore("a").clear();for(const k in inflight)delete inflight[k];$("elProg").textContent="Sons enregistrés effacés."}catch(e){}};
+if(EL.key&&lsGet("el-on",false))elConnect();
+
+
+// ================= MA VOIX : enregistrements + prénoms recollés =================
+let vdb=null;
+function vidb(){if(!vdb)vdb=new Promise((res,rej)=>{const r=indexedDB.open("contes-ma-voix",1);r.onupgradeneeded=()=>r.result.createObjectStore("r");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});return vdb}
+const myKeys=new Set();
+async function vLoadKeys(){try{const db=await vidb();await new Promise(res=>{const q=db.transaction("r").objectStore("r").getAllKeys();q.onsuccess=()=>{(q.result||[]).forEach(k=>myKeys.add(k));res()};q.onerror=res})}catch(e){}}
+async function vGet(k){try{const db=await vidb();return await new Promise(res=>{const q=db.transaction("r").objectStore("r").get(k);q.onsuccess=()=>res(q.result||null);q.onerror=()=>res(null)})}catch(e){return null}}
+async function vPut(k,v){const db=await vidb();await new Promise((res,rej)=>{const tx=db.transaction("r","readwrite");tx.objectStore("r").put(v,k);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});myKeys.add(k);decoded.delete(k)}
+async function vDel(k){try{const db=await vidb();db.transaction("r","readwrite").objectStore("r").delete(k)}catch(e){}myKeys.delete(k);decoded.delete(k)}
+vLoadKeys();
+const myOn=()=>$("myOn").checked;
+$("myOn").checked=lsGet("my-on",true);$("myOn").onchange=()=>lsSet("my-on",$("myOn").checked);
+
+// Découpe une réplique ou un passage en morceaux de texte + prénoms
+const normT=t=>t.replace(/[«»]/g,"").replace(/\s+/g," ").replace(/^[\s,;:.!?…-]+/,"").trim();
+function pieces(seg){
+  const parts=genders(seg.raw).split(/\{([A-D])\}/);const out=[];
+  parts.forEach((p,i)=>{
+    if(i%2===1){const n=nameOf(p);out.push({type:"name",k:p,label:n,key:"n|"+n.toLowerCase().trim()})}
+    else{const t=normT(p);if(/[\p{L}\d]/u.test(t))out.push({type:"text",label:t,key:"t|"+t})}
+  });return out;
+}
+// --- lecture avec ma voix ---
+const decoded=new Map();
+async function vDecode(k){if(decoded.has(k))return decoded.get(k);const buf=await vGet(k);if(!buf)return null;unlockAudio();
+  const ab=await new Promise((res,rej)=>{try{const p=AC.decodeAudioData(buf.slice(0),res,rej);if(p&&p.then)p.then(res,rej)}catch(e){rej(e)}});
+  // on coupe les silences au début et à la fin, pour que les prénoms se collent naturellement
+  const d=ab.getChannelData(0),sr=ab.sampleRate;let peak=0;for(let i=0;i<d.length;i+=4)peak=Math.max(peak,Math.abs(d[i]));
+  const th=Math.max(0.015,peak*0.08);let s=0;while(s<d.length&&Math.abs(d[s])<th)s++;let e=d.length-1;while(e>s&&Math.abs(d[e])<th)e--;
+  const item={ab,off:Math.max(0,s/sr-0.04),dur:Math.max(0.1,Math.min(ab.duration,(e/sr)+0.12)-Math.max(0,s/sr-0.04))};
+  decoded.set(k,item);return item}
+let mySrc=null;
+function playItem(it){return new Promise(res=>{const src=AC.createBufferSource();src.buffer=it.ab;src.connect(AC.destination);mySrc=src;
+  src.onended=()=>{if(mySrc===src)mySrc=null;res()};src.start(0,it.off,it.dur)})}
+async function myVoicePlay(seg,myTok){
+  if(!myOn())return false;const ps=pieces(seg);if(!ps.length||!ps.every(p=>myKeys.has(p.key)))return false;
+  let items;try{items=await Promise.all(ps.map(p=>vDecode(p.key)))}catch(e){return false}
+  if(items.some(x=>!x)||myTok!==token)return myTok!==token;
+  duck(true);
+  for(let i=0;i<items.length;i++){if(myTok!==token)break;await playItem(items[i]);if(i<items.length-1)await wait(ps[i].type==="text"&&/[.!?…]$/.test(ps[i].label)?250:30)}
+  duck(false);return true}
+function myStop(){if(mySrc){try{mySrc.stop()}catch(e){}mySrc=null}}
+
+// --- studio d'enregistrement ---
+const HINT={doux:"doucement",chuchote:"en chuchotant",crie:"en criant",peur:"avec peur",triste:"tristement",colere:"en colère"};
+let studioFrom="cast",rows=[],rec=null,recStream=null,recChunks=[],recKey=null;
+function buildRows(){
+  const names=new Map(),texts=[],seen=new Set();
+  tale.pages.forEach((p,pi)=>segments(p).forEach(s=>{if(s.type!=="n"&&s.type!=="s")return;
+    let who="";if(s.type==="s"){const r=tale.roles.find(x=>x.k===s.k);who=r?`${r.ico} ${nameOf(s.k)} parle`:"🗣️ un personnage parle"}
+    if(s.style&&HINT[s.style])who+=(who?", ":"")+HINT[s.style];
+    pieces(s).forEach(pc=>{if(pc.type==="name"){names.set(pc.key,pc)}else if(!seen.has(pc.key)){seen.add(pc.key);texts.push({...pc,page:pi+1,who})}})}));
+  rows=[...names.values(),...texts];
+}
+function studioCounts(){const done=rows.filter(r=>myKeys.has(r.key)).length;return [done,rows.length]}
+function renderStudio(){
+  buildRows();const [d,n]=studioCounts();
+  $("studioSub").innerHTML=`<b>${esc(tale.title)}</b> — lis chaque morceau à voix haute, comme si tu racontais. Les prénoms s'enregistrent une seule fois et servent pour toutes les histoires.`;
+  $("studioBar").style.width=(n?d/n*100:0)+"%";
+  $("studioMsg").textContent=`${d} / ${n} morceaux enregistrés`+(d===n?" — 🎉 l'histoire est entièrement à ta voix !":" — tu peux t'arrêter quand tu veux, la suite sera lue par la voix du téléphone.");
+  let html=`<h3 style="margin:16px 0 8px">🏷️ Les prénoms</h3>`;let lastPage=0;
+  rows.forEach((r,i)=>{
+    if(r.type==="text"&&r.page!==lastPage){lastPage=r.page;html+=`<h3 style="margin:16px 0 8px">📄 Page ${r.page}</h3>`}
+    const ok=myKeys.has(r.key);
+    html+=`<div class="rrow ${ok?"done":""}" id="row-${i}">
+      <div class="tx">${r.type==="name"?`<span class="nm">${esc(r.label)}</span>`:esc(r.label)}${r.who?`<small>${esc(r.who)}</small>`:""}</div>
+      <button class="rec" data-i="${i}" aria-label="Enregistrer">●</button>
+      <button class="mini" data-p="${i}" ${ok?"":"disabled"} aria-label="Écouter">▶</button>
+      <button class="mini" data-d="${i}" ${ok?"":"disabled"} aria-label="Effacer">✕</button></div>`});
+  $("studioList").innerHTML=html;
+  $("studioList").querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>toggleRec(+b.dataset.i,b));
+  $("studioList").querySelectorAll("[data-p]").forEach(b=>b.onclick=async()=>{unlockAudio();myStop();const it=await vDecode(rows[+b.dataset.p].key);if(it)playItem(it)});
+  $("studioList").querySelectorAll("[data-d]").forEach(b=>b.onclick=async()=>{await vDel(rows[+b.dataset.d].key);renderStudio()});
+}
+async function toggleRec(i,btn){
+  unlockAudio();myStop();
+  if(rec){const same=recKey===rows[i].key;rec.stop();if(same)return}
+  if(!navigator.mediaDevices||!window.MediaRecorder){$("studioMsg").textContent="⚠️ Le micro n'est pas disponible ici. Ouvre l'application depuis son lien en ligne, dans Safari ou Chrome.";return}
+  try{if(!recStream||!recStream.active)recStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}})}
+  catch(e){$("studioMsg").textContent="⚠️ Le micro est refusé. Autorise le micro pour ce site (ou ouvre l'application depuis son lien en ligne, pas dans Claude).";return}
+  const mt=["audio/mp4","audio/webm;codecs=opus","audio/webm","audio/ogg"].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t));
+  rec=new MediaRecorder(recStream,mt?{mimeType:mt}:undefined);recChunks=[];recKey=rows[i].key;const key=recKey;
+  rec.ondataavailable=e=>{if(e.data&&e.data.size)recChunks.push(e.data)};
+  rec.onstop=async()=>{const blob=new Blob(recChunks,{type:(rec&&rec.mimeType)||mt||"audio/mp4"});rec=null;
+    try{await vPut(key,await blob.arrayBuffer())}catch(e){$("studioMsg").textContent="⚠️ Impossible d'enregistrer : "+e}
+    renderStudio();const nx=rows.findIndex(r=>!myKeys.has(r.key));if(nx>=0){const el=$("row-"+nx);if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("next")}}};
+  rec.start();btn.classList.add("on");btn.textContent="■";$("studioMsg").textContent="🔴 Enregistrement… touche ■ quand tu as fini.";
+}
+function openStudio(from){studioFrom=from;show("studio");renderStudio()}
+$("studioBack").onclick=()=>{if(rec)rec.stop();if(studioFrom==="read"){show("read");renderBook();startMusic()}else{renderRoles();show("cast")}};
+$("studioBtn").onclick=()=>{const all=lsGet("contes-cast",{});all[tale.id]=cast;lsSet("contes-cast",all);openStudio("cast")};
+$("studioBtn2").onclick=()=>openStudio("read");
+
+// ================= VOIX IA GRATUITE (Piper, calculée sur le téléphone) =================
+const PIPER={on:lsGet("piper-on",false),fem:"fr_FR-siwis-medium",mal:"fr_FR-tom-medium",lib:null};
+function piperLib(){if(!PIPER.lib)PIPER.lib=import("https://cdn.jsdelivr.net/npm/@diffusionstudio/vits-web/+esm").catch(e=>{PIPER.lib=null;throw e});return PIPER.lib}
+function setPiperState(m){$("piperState").textContent=m}
+const piperOn=()=>PIPER.on;
+async function piperInstall(){
+  unlockAudio();setPiperState("Préparation du téléchargement (environ 120 Mo, une seule fois — en Wi-Fi de préférence)…");
+  try{const tts=await piperLib();
+    for(const [v,lab] of [[PIPER.fem,"la voix de femme"],[PIPER.mal,"la voix d'homme"]]){
+      await tts.download(v,p=>{if(p&&p.total)setPiperState(`Téléchargement de ${lab} : ${Math.round(p.loaded/p.total*100)} %`)})}
+    PIPER.on=true;lsSet("piper-on",true);
+    setPiperState("Test de la voix…");const t=++token;await piperSay("Il était une fois, au bord d'une grande forêt, une petite maison.",{},t);
+    setPiperState("✅ Voix IA installées. Les histoires seront lues avec elles.");
+  }catch(e){PIPER.on=false;lsSet("piper-on",false);
+    setPiperState("❌ Installation impossible : "+(e.message||e)+". Vérifie que l'application est ouverte depuis son lien en ligne (pas dans Claude) et que tu as internet.")}
+}
+function piperVoice(k){const cat=roleCat(k);
+  if(cat==="homme"||cat==="grave")return PIPER.mal;
+  if(cat==="vieux"&&k&&cast[k]&&cast[k].g==="m")return PIPER.mal;
+  return PIPER.fem}
+let pchain=Promise.resolve();
+function piperGet(voice,t){
+  const key="piper|"+voice+"|"+t;if(inflight[key])return inflight[key];
+  return inflight[key]=(async()=>{const c=await cacheGet(key);if(c)return c;
+    // une phrase à la fois, pour ne pas bloquer le téléphone
+    const p=pchain.then(async()=>{const tts=await piperLib();const wav=await tts.predict({text:t,voiceId:voice});return await wav.arrayBuffer()});
+    pchain=p.catch(()=>{});const buf=await p;await cachePut(key,buf);return buf})().catch(e=>{delete inflight[key];throw e});
+}
+const pText=t=>t.replace(/[«»]/g,"").replace(/\s+/g," ").trim();
+function piperWarm(idx){if(!piperOn()||!tale||idx<0||idx>=tale.pages.length)return;
+  segments(tale.pages[idx]).forEach(s=>{if(s.type==="n"||s.type==="s")piperGet(piperVoice(s.type==="s"?s.k:null),pText(plain(s.raw))).catch(()=>{})})}
+// léger changement de hauteur selon le personnage (grosse voix du loup, petite voix des enfants)
+const PSHIFT={conteuse:1,femme:1.03,homme:1,enfant:1.13,grave:0.85,vieux:0.94};
+async function piperSay(text,{k,style}={},myTok){
+  const voice=piperVoice(k);const buf=await piperGet(voice,pText(text));
+  if(myTok!==token)return;unlockAudio();const ab=await decode(buf);if(myTok!==token)return;
+  let rate=PSHIFT[roleCat(k)]||1;if(/chuchote|triste|doux/.test(style||""))rate*=0.97;if(/crie|peur/.test(style||""))rate*=1.04;
+  duck(true);
+  await new Promise(res=>{const src=AC.createBufferSource();src.buffer=ab;src.playbackRate.value=rate;
+    const g=AC.createGain();g.gain.value=style==="chuchote"?0.55:1;src.connect(g);g.connect(AC.destination);curSrc=src;
+    src.onended=()=>{if(curSrc===src)curSrc=null;res()};src.start()});
+  duck(false);
+}
+$("piperInstall").onclick=piperInstall;
+$("piperOff").onclick=()=>{PIPER.on=false;lsSet("piper-on",false);setPiperState("Voix IA désactivée. Touche « Installer » pour la réactiver (rien ne sera retéléchargé).")};
+if(PIPER.on)setPiperState("✅ Voix IA installées. Les histoires sont lues avec elles.");
+</script>
+</body>
+</html>
