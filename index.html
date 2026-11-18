@@ -149,6 +149,11 @@
       <h2>Enregistre ta voix</h2>
       <p class="sub" id="studioSub"></p>
       <div class="row" style="justify-content:center;margin-bottom:10px"><input type="checkbox" id="myOn" checked><label for="myOn" style="margin:0">Lire les histoires avec ma voix</label></div>
+      <div class="actions" style="margin:4px 0 12px">
+        <button class="small" id="expBtn">📤 Exporter mes enregistrements</button>
+        <button class="small" id="impBtn">📥 Importer</button>
+        <input type="file" id="impFile" accept=".json,application/json" class="hidden">
+      </div>
       <div class="progress"><div id="studioBar"></div></div>
       <p class="tip" id="studioMsg" style="text-align:center"></p>
       <div id="studioList"></div>
@@ -1269,6 +1274,46 @@ async function piperSay(text,{k,style}={},myTok){
 $("piperInstall").onclick=piperInstall;
 $("piperOff").onclick=()=>{PIPER.on=false;lsSet("piper-on",false);setPiperState("Voix IA désactivée. Touche « Installer » pour la réactiver (rien ne sera retéléchargé).")};
 if(PIPER.on)setPiperState("✅ Voix IA installées. Les histoires sont lues avec elles.");
+
+// ================= EXPORTER / IMPORTER MES ENREGISTREMENTS =================
+// Enregistrements intégrés à l'application (remplis par Claude à partir d'un export)
+const BUILTIN_VOICE=null;
+function ab2b64(buf){const b=new Uint8Array(buf);let s="";for(let i=0;i<b.length;i+=0x8000)s+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000));return btoa(s)}
+function b642ab(s){const bin=atob(s);const b=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)b[i]=bin.charCodeAt(i);return b.buffer}
+async function vAll(){const db=await vidb();return await new Promise((res,rej)=>{const out=[];const tx=db.transaction("r");const st=tx.objectStore("r");
+  const q=st.openCursor();q.onsuccess=()=>{const c=q.result;if(c){out.push([c.key,c.value]);c.continue()}else res(out)};q.onerror=()=>rej(q.error)})}
+async function importItems(items,overwrite){let n=0;
+  for(const it of items){if(!it||!it.key||!it.data)continue;if(!overwrite&&myKeys.has(it.key))continue;
+    try{await vPut(it.key,b642ab(it.data));n++}catch(e){}}
+  return n}
+async function exportVoices(){
+  const msg=m=>{$("studioMsg").textContent=m};
+  try{const all=await vAll();if(!all.length){msg("Aucun enregistrement à exporter pour l'instant.");return}
+    msg(`Préparation de ${all.length} enregistrements…`);
+    const data={app:"contes-magiques",v:1,date:new Date().toISOString(),items:all.map(([key,buf])=>({key,data:ab2b64(buf)}))};
+    const name=`mes-enregistrements-contes-${new Date().toISOString().slice(0,10)}.json`;
+    const file=new File([JSON.stringify(data)],name,{type:"application/json"});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      try{await navigator.share({files:[file],title:"Mes enregistrements de contes"});msg(`✅ ${all.length} enregistrements exportés.`);return}
+      catch(e){if(e&&e.name==="AbortError"){msg("Export annulé.");return}}
+    }
+    const a=document.createElement("a");a.href=URL.createObjectURL(file);a.download=name;document.body.appendChild(a);a.click();
+    setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);
+    msg(`✅ Fichier « ${name} » créé (${all.length} enregistrements). Retrouve-le dans tes Téléchargements / Fichiers.`);
+  }catch(e){msg("⚠️ Export impossible : "+(e.message||e))}
+}
+async function importVoices(file){
+  const msg=m=>{$("studioMsg").textContent=m};
+  try{msg("Import en cours…");const j=JSON.parse(await file.text());
+    if(!j||j.app!=="contes-magiques"||!Array.isArray(j.items))throw new Error("ce fichier n'est pas un export de Mes Contes Magiques");
+    const n=await importItems(j.items,true);renderStudio();msg(`✅ ${n} enregistrements importés.`);
+  }catch(e){msg("⚠️ Import impossible : "+(e.message||e))}
+}
+$("expBtn").onclick=exportVoices;
+$("impBtn").onclick=()=>$("impFile").click();
+$("impFile").onchange=()=>{const f=$("impFile").files[0];if(f)importVoices(f);$("impFile").value=""};
+// au premier lancement, on ajoute les enregistrements intégrés qui manquent
+(async()=>{if(!BUILTIN_VOICE||!BUILTIN_VOICE.items)return;await vLoadKeys();await importItems(BUILTIN_VOICE.items,false)})();
 </script>
 </body>
 </html>
